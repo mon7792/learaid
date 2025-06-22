@@ -1,3 +1,4 @@
+"use client";
 import DiagramWorkspace from '@/components/diagram-workspace';
 
 interface DiagramPageProps {
