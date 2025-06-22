@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Excalidraw } from '@excalidraw/excalidraw';
 import type { ExcalidrawElement } from '@excalidraw/excalidraw/types/element/types';
-import { convertMermaidToExcalidraw } from '@/lib/mermaid-converter';
+import { parseMermaidToExcalidraw } from '@excalidraw/mermaid-to-excalidraw';
 
 interface ExcalidrawWrapperProps {
   mermaidCode: string;
@@ -22,10 +22,14 @@ export default function ExcalidrawWrapper({ mermaidCode }: ExcalidrawWrapperProp
   const convertDiagram = async () => {
     setIsConverting(true);
     try {
-      const excalidrawElements = await convertMermaidToExcalidraw(mermaidCode);
+      const { elements: excalidrawElements } = await parseMermaidToExcalidraw(mermaidCode, {
+        fontSize: 16,
+      });
       setElements(excalidrawElements);
     } catch (error) {
       console.error('Error converting diagram:', error);
+      // Set empty elements on error to prevent showing old diagram
+      setElements([]);
     } finally {
       setIsConverting(false);
     }
