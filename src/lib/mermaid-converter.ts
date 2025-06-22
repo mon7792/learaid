@@ -1,4 +1,4 @@
-import type { ExcalidrawElement } from '@excalidraw/excalidraw/types/element/types';
+import type { ExcalidrawElement } from '@excalidraw/excalidraw';
 
 // Basic converter that creates simple shapes for Mermaid diagrams
 // This is a simplified implementation - a full converter would parse Mermaid syntax more thoroughly
