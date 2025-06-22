@@ -1,5 +1,10 @@
+'use client';
+
 import { Button } from "@/components/ui/button";
 import { Sparkles, ArrowRight, Lightbulb } from "lucide-react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { nanoid } from "nanoid";
 
 const samplePrompts = [
   "Create a flowchart for a user registration process",
@@ -11,6 +16,36 @@ const samplePrompts = [
 ];
 
 export default function Home() {
+  const [prompt, setPrompt] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const router = useRouter();
+
+  const handleSubmit = async (promptText: string) => {
+    if (!promptText.trim()) return;
+    
+    setIsGenerating(true);
+    const diagramId = nanoid(8);
+    
+    // Navigate to diagram page with prompt
+    router.push(`/diagram/${diagramId}?prompt=${encodeURIComponent(promptText)}`);
+  };
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSubmit(prompt);
+  };
+
+  const handleSampleClick = (samplePrompt: string) => {
+    handleSubmit(samplePrompt);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(prompt);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 flex flex-col">
       {/* Header */}
@@ -42,18 +77,28 @@ export default function Home() {
           </div>
 
           {/* Input Section */}
-          <div className="max-w-2xl mx-auto space-y-4">
+          <form onSubmit={handleFormSubmit} className="max-w-2xl mx-auto space-y-4">
             <div className="relative">
               <textarea
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                onKeyDown={handleKeyDown}
                 placeholder="Describe the diagram you want to create..."
-                className="w-full min-h-[120px] p-4 pr-16 text-lg border border-input rounded-xl bg-background/50 backdrop-blur-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all"
+                className="w-full min-h-[120px] p-4 pr-16 text-lg border border-input rounded-xl bg-background/50 backdrop-blur-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all disabled:opacity-50"
                 rows={4}
+                disabled={isGenerating}
               />
               <Button 
+                type="submit"
                 size="icon"
                 className="absolute bottom-4 right-4 rounded-full w-10 h-10"
+                disabled={isGenerating || !prompt.trim()}
               >
-                <ArrowRight className="w-5 h-5" />
+                {isGenerating ? (
+                  <div className="w-5 h-5 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <ArrowRight className="w-5 h-5" />
+                )}
               </Button>
             </div>
             
@@ -61,7 +106,7 @@ export default function Home() {
               <Lightbulb className="w-4 h-4 mr-2" />
               Press Enter to generate or click the arrow
             </div>
-          </div>
+          </form>
 
           {/* Sample Prompts */}
           <div className="space-y-4">
@@ -71,8 +116,10 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-4xl mx-auto">
               {samplePrompts.map((prompt, index) => (
                 <button
+                  onClick={() => handleSampleClick(prompt)}
                   key={index}
-                  className="p-4 text-left bg-card hover:bg-accent rounded-lg border border-border transition-all hover:border-accent-foreground/20 hover:shadow-sm group"
+                  className="p-4 text-left bg-card hover:bg-accent rounded-lg border border-border transition-all hover:border-accent-foreground/20 hover:shadow-sm group disabled:opacity-50"
+                  disabled={isGenerating}
                 >
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 bg-primary rounded-full mt-2 group-hover:bg-accent-foreground transition-colors" />
