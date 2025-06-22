@@ -1,3 +1,4 @@
+"use client"
 import type { ExcalidrawElement } from '@excalidraw/excalidraw';
 
 // Basic converter that creates simple shapes for Mermaid diagrams
