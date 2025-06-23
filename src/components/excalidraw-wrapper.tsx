@@ -1,102 +1,86 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Excalidraw } from '@excalidraw/excalidraw';
-import type { ExcalidrawElement } from '@excalidraw/excalidraw/types/element/types';
-import { parseMermaidToExcalidraw } from '@excalidraw/mermaid-to-excalidraw';
+import {
+  Excalidraw,
+  convertToExcalidrawElements,
+} from "@excalidraw/excalidraw";
+import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
+import { parseMermaidToExcalidraw } from "@excalidraw/mermaid-to-excalidraw";
+import "@excalidraw/excalidraw/index.css";
 
 interface ExcalidrawWrapperProps {
-  mermaidCode: string;
+  mermaidCode?: string;
 }
 
-export default function ExcalidrawWrapper({ mermaidCode }: ExcalidrawWrapperProps) {
-  const [elements, setElements] = useState<ExcalidrawElement[]>([]);
-  const [isConverting, setIsConverting] = useState(false);
-  const [error, setError] = useState<string>('');
+const defaultMermaidCode = `
+graph TD
+A[Start] --> B[Stop]
+`;
+
+export default function ExcalidrawWrapper({ mermaidCode = defaultMermaidCode }: ExcalidrawWrapperProps) {
+  const [isConverting, setIsConverting] = useState(true);
+  const [excalidrawAPI, setExcalidrawAPI] = useState<ExcalidrawImperativeAPI | null>(null);
 
   useEffect(() => {
-    const convertDiagram = async () => {
-      if (!mermaidCode?.trim()) {
-        setElements([]);
-        return;
-      }
+    if (!excalidrawAPI || !mermaidCode) {
+      return;
+    }
 
+    let isCancelled = false;
+
+    const convertAndCenter = async () => {
       setIsConverting(true);
-      setError('');
-
       try {
-        console.log('Converting mermaid code:', mermaidCode);
+        const { elements: skeletonElements, files: excalidrawFiles } = await parseMermaidToExcalidraw(mermaidCode, {});
         
-        const { elements: excalidrawElements } = await parseMermaidToExcalidraw(mermaidCode, {
-          fontSize: 16,
+        if (isCancelled) return;
+        
+        const excalidrawElements = convertToExcalidrawElements(skeletonElements);
+        
+        excalidrawAPI.updateScene({ 
+          elements: excalidrawElements,
         });
-        
-        console.log('Converted elements:', excalidrawElements);
-        setElements(excalidrawElements);
+
+        if (excalidrawFiles) {
+          excalidrawAPI.addFiles(Object.values(excalidrawFiles));
+        }
+
+        excalidrawAPI.scrollToContent(excalidrawElements, { fitToContent: true, duration: 0 });
+
       } catch (error) {
         console.error('Error converting diagram:', error);
-        setError(`Failed to convert diagram: ${error instanceof Error ? error.message : 'Unknown error'}`);
-        setElements([]);
+        if (isCancelled) return;
+        excalidrawAPI.updateScene({ elements: [] });
       } finally {
-        setIsConverting(false);
+        if (!isCancelled) {
+          setIsConverting(false);
+        }
       }
     };
 
-    convertDiagram();
-  }, [mermaidCode]);
+    convertAndCenter();
 
-  if (isConverting) {
-    return (
-      <div className="flex-1 flex items-center justify-center bg-muted/10">
-        <div className="text-center space-y-4">
-          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p className="text-muted-foreground">Converting diagram...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex-1 flex items-center justify-center bg-muted/10">
-        <div className="text-center space-y-4 max-w-md">
-          <div className="w-12 h-12 bg-destructive/10 rounded-full flex items-center justify-center mx-auto">
-            <span className="text-destructive text-xl">⚠</span>
-          </div>
-          <div>
-            <p className="text-destructive font-medium mb-2">Failed to render diagram</p>
-            <p className="text-muted-foreground text-sm">{error}</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (!mermaidCode?.trim()) {
-    return (
-      <div className="flex-1 flex items-center justify-center bg-muted/10">
-        <div className="text-center space-y-4">
-          <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center mx-auto">
-            <span className="text-muted-foreground text-xl">📊</span>
-          </div>
-          <p className="text-muted-foreground">No diagram to display</p>
-        </div>
-      </div>
-    );
-  }
+    return () => {
+      isCancelled = true;
+    };
+  }, [mermaidCode, excalidrawAPI]);
 
   return (
-    <div className="h-full w-full">
+    <div className="h-full w-full relative">
+      {isConverting && (
+        <div className="absolute inset-0 flex items-center justify-center bg-muted/10 z-10">
+          <div className="text-center space-y-4">
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <p className="text-muted-foreground">Converting diagram...</p>
+          </div>
+        </div>
+      )}
       <Excalidraw
-        initialData={{ 
-          elements,
-          appState: {
-            viewBackgroundColor: "#ffffff",
-            zoom: { value: 1 },
-          }
-        }}
+        excalidrawAPI={setExcalidrawAPI}
+        initialData={{ elements: [], files: {} }}
         viewModeEnabled={false}
-        theme="light"
+        theme="dark"
         name="Learaid Diagram"
         UIOptions={{
           canvasActions: {
@@ -106,7 +90,6 @@ export default function ExcalidrawWrapper({ mermaidCode }: ExcalidrawWrapperProp
               saveFileToDisk: true,
             },
             toggleTheme: true,
-            clearCanvas: true,
           },
         }}
       />

@@ -5,8 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Sparkles, Send, Home, Loader2 } from 'lucide-react';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
 import { useDebouncedCallback } from 'use-debounce';
+import "@excalidraw/excalidraw/index.css";
+
+
+import dynamic from "next/dynamic";
+
 
 // Dynamically import Excalidraw to avoid SSR issues
 const ExcalidrawWrapper = dynamic(
@@ -38,7 +42,7 @@ export default function DiagramWorkspace({ diagramId, initialPrompt }: DiagramWo
   // Generate diagram when component mounts with initial prompt
   useEffect(() => {
     if (initialPrompt.trim()) {
-      generateDiagram(initialPrompt);
+      // generateDiagram(initialPrompt);
     }
   }, [initialPrompt]);
 
@@ -62,6 +66,8 @@ export default function DiagramWorkspace({ diagramId, initialPrompt }: DiagramWo
       if (!response.ok) {
         throw new Error(data.error || 'Failed to generate diagram');
       }
+
+      console.log("data", data.mermaidCode);
 
       setMermaidCode(data.mermaidCode);
     } catch (err) {
@@ -185,7 +191,7 @@ export default function DiagramWorkspace({ diagramId, initialPrompt }: DiagramWo
 
         {/* Excalidraw Canvas */}
         <div className="flex-1 relative">
-          <ExcalidrawWrapper mermaidCode={mermaidCode} />
+          <ExcalidrawWrapper />
         </div>
       </div>
     </>
