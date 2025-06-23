@@ -5,6 +5,7 @@ import { Sparkles, ArrowRight, Lightbulb } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { nanoid } from "nanoid";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const samplePrompts = [
   "Create a flowchart for a user registration process",
@@ -59,6 +60,7 @@ export default function Home() {
         <div className="flex gap-3">
           <Button variant="ghost">Sign In</Button>
           <Button>Get Started</Button>
+          <ThemeToggle />
         </div>
       </header>
 
