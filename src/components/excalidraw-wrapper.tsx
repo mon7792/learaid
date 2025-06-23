@@ -12,28 +12,38 @@ interface ExcalidrawWrapperProps {
 export default function ExcalidrawWrapper({ mermaidCode }: ExcalidrawWrapperProps) {
   const [elements, setElements] = useState<ExcalidrawElement[]>([]);
   const [isConverting, setIsConverting] = useState(false);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
-    if (mermaidCode) {
-      convertDiagram();
-    }
-  }, [mermaidCode]);
+    const convertDiagram = async () => {
+      if (!mermaidCode?.trim()) {
+        setElements([]);
+        return;
+      }
 
-  const convertDiagram = async () => {
-    setIsConverting(true);
-    try {
-      const { elements: excalidrawElements } = await parseMermaidToExcalidraw(mermaidCode, {
-        fontSize: 16,
-      });
-      setElements(excalidrawElements);
-    } catch (error) {
-      console.error('Error converting diagram:', error);
-      // Set empty elements on error to prevent showing old diagram
-      setElements([]);
-    } finally {
-      setIsConverting(false);
-    }
-  };
+      setIsConverting(true);
+      setError('');
+
+      try {
+        console.log('Converting mermaid code:', mermaidCode);
+        
+        const { elements: excalidrawElements } = await parseMermaidToExcalidraw(mermaidCode, {
+          fontSize: 16,
+        });
+        
+        console.log('Converted elements:', excalidrawElements);
+        setElements(excalidrawElements);
+      } catch (error) {
+        console.error('Error converting diagram:', error);
+        setError(`Failed to convert diagram: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        setElements([]);
+      } finally {
+        setIsConverting(false);
+      }
+    };
+
+    convertDiagram();
+  }, [mermaidCode]);
 
   if (isConverting) {
     return (
@@ -46,10 +56,45 @@ export default function ExcalidrawWrapper({ mermaidCode }: ExcalidrawWrapperProp
     );
   }
 
+  if (error) {
+    return (
+      <div className="flex-1 flex items-center justify-center bg-muted/10">
+        <div className="text-center space-y-4 max-w-md">
+          <div className="w-12 h-12 bg-destructive/10 rounded-full flex items-center justify-center mx-auto">
+            <span className="text-destructive text-xl">⚠</span>
+          </div>
+          <div>
+            <p className="text-destructive font-medium mb-2">Failed to render diagram</p>
+            <p className="text-muted-foreground text-sm">{error}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!mermaidCode?.trim()) {
+    return (
+      <div className="flex-1 flex items-center justify-center bg-muted/10">
+        <div className="text-center space-y-4">
+          <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center mx-auto">
+            <span className="text-muted-foreground text-xl">📊</span>
+          </div>
+          <p className="text-muted-foreground">No diagram to display</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="h-full w-full">
       <Excalidraw
-        initialData={{ elements }}
+        initialData={{ 
+          elements,
+          appState: {
+            viewBackgroundColor: "#ffffff",
+            zoom: { value: 1 },
+          }
+        }}
         viewModeEnabled={false}
         theme="light"
         name="Learaid Diagram"
@@ -61,6 +106,7 @@ export default function ExcalidrawWrapper({ mermaidCode }: ExcalidrawWrapperProp
               saveFileToDisk: true,
             },
             toggleTheme: true,
+            clearCanvas: true,
           },
         }}
       />
