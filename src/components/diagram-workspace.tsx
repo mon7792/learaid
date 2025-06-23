@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Sparkles, Send, Home, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useDebouncedCallback } from 'use-debounce';
+import { ThemeToggle } from '@/components/theme-toggle';
 import "@excalidraw/excalidraw/index.css";
 
 
@@ -115,6 +116,7 @@ export default function DiagramWorkspace({ diagramId, initialPrompt }: DiagramWo
               Home
             </Link>
           </Button>
+          <ThemeToggle />
         </div>
       </header>
 

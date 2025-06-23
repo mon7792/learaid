@@ -8,6 +8,7 @@ import {
 import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
 import { parseMermaidToExcalidraw } from "@excalidraw/mermaid-to-excalidraw";
 import "@excalidraw/excalidraw/index.css";
+import { useTheme } from "@/contexts/theme-context";
 
 interface ExcalidrawWrapperProps {
   mermaidCode?: string;
@@ -21,6 +22,7 @@ A[Start] --> B[Stop]
 export default function ExcalidrawWrapper({ mermaidCode = defaultMermaidCode }: ExcalidrawWrapperProps) {
   const [isConverting, setIsConverting] = useState(true);
   const [excalidrawAPI, setExcalidrawAPI] = useState<ExcalidrawImperativeAPI | null>(null);
+  const { effectiveTheme } = useTheme();
 
   useEffect(() => {
     if (!excalidrawAPI || !mermaidCode) {
@@ -80,7 +82,7 @@ export default function ExcalidrawWrapper({ mermaidCode = defaultMermaidCode }: 
         excalidrawAPI={setExcalidrawAPI}
         initialData={{ elements: [], files: {} }}
         viewModeEnabled={false}
-        theme="dark"
+        theme={effectiveTheme}
         name="Learaid Diagram"
         UIOptions={{
           canvasActions: {
