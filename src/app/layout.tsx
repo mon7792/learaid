@@ -5,6 +5,8 @@
 +import { Suspense } from "react";
  
  const geistSans = Geist({
+ }
+ )
 @@ .. @@
        >
          <ThemeProvider>
