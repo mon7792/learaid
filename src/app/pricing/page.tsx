@@ -30,7 +30,7 @@ export default function PricingPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.token}`,
+          'Authorization': `Bearer ${session?.session.token}`,
         },
         body: JSON.stringify({
           price_id: priceId,

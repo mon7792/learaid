@@ -33,8 +33,8 @@ export default function LoginPage() {
       } else {
         router.push('/');
       }
-    } catch (err) {
-      setError('An unexpected error occurred');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
     } finally {
       setIsLoading(false);
     }
@@ -114,7 +114,7 @@ export default function LoginPage() {
             </form>
 
             <div className="mt-6 text-center text-sm">
-              <span className="text-muted-foreground">Don't have an account? </span>
+              <span className="text-muted-foreground">Don&apos;t have an account? </span>
               <Link href="/auth/signup" className="text-primary hover:underline">
                 Sign up
               </Link>

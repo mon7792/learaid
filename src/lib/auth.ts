@@ -1,17 +1,14 @@
 import { betterAuth } from "better-auth";
-import { supabaseAdapter } from "better-auth/adapters/supabase";
+import { Pool } from "pg";
 
 export const auth = betterAuth({
-  database: supabaseAdapter({
-    url: process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    secretKey: process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  database: new Pool({
+    connectionString: process.env.DATABASE_URL,
   }),
-  emailAndPassword: {
-    enabled: true,
-    requireEmailVerification: false,
+  socialProviders: {
+    github: {
+      clientId: process.env.GITHUB_CLIENT_ID as string,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+    },
   },
-  socialProviders: {},
 });
-
-export type Session = typeof auth.$Infer.Session;
-export type User = typeof auth.$Infer.User;

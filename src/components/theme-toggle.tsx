@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sun, Moon, Monitor } from 'lucide-react';
 import { useTheme } from '@/contexts/theme-context';
@@ -12,6 +13,11 @@ import {
 
 export function ThemeToggle() {
   const { theme, setTheme, effectiveTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const getIcon = () => {
     switch (effectiveTheme) {
@@ -28,7 +34,7 @@ export function ThemeToggle() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="w-9 h-9">
-          {getIcon()}
+          {mounted && getIcon()}
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
