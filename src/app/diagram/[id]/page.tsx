@@ -1,25 +1,25 @@
-"use client";
-import DiagramWorkspace from '@/components/diagram-workspace';
+import DiagramWorkspace from "@/components/diagram-workspace";
 
 interface DiagramPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     prompt?: string;
-  };
+  }>;
 }
 
-export default function DiagramPage({ params, searchParams }: DiagramPageProps) {
-  const { id } = params;
-  const initialPrompt = searchParams.prompt || '';
+export default async function DiagramPage({
+  params,
+  searchParams,
+}: DiagramPageProps) {
+  const { id } = await params;
+  const { prompt } = await searchParams;
+  const initialPrompt = prompt || "";
 
   return (
     <div className="h-screen flex flex-col">
-      <DiagramWorkspace 
-        diagramId={id}
-        initialPrompt={initialPrompt}
-      />
+      <DiagramWorkspace diagramId={id} initialPrompt={initialPrompt} />
     </div>
   );
-}</parameter>
+}

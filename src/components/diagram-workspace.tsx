@@ -190,4 +190,4 @@ export default function DiagramWorkspace({ diagramId, initialPrompt }: DiagramWo
       </div>
     </>
   );
-}</parameter>
+}
