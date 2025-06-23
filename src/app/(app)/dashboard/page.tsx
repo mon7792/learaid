@@ -4,23 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Sparkles, ArrowLeft, Plus } from 'lucide-react';
 import Link from 'next/link';
 import { SubscriptionStatus } from '@/components/subscription-status';
-import { useSession } from '@/lib/auth-client';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 
 export default function DashboardPage() {
-  const { data: session } = useSession();
-  const router = useRouter();
 
-  useEffect(() => {
-    if (!session) {
-      router.push('/auth/login');
-    }
-  }, [session, router]);
-
-  if (!session) {
-    return null;
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
@@ -48,7 +34,7 @@ export default function DashboardPage() {
           {/* Welcome Section */}
           <div className="space-y-4">
             <h1 className="text-3xl font-bold">
-              Welcome back, {session.user.email}
+              Welcome back, email
             </h1>
             <p className="text-muted-foreground">
               Manage your diagrams and subscription from your dashboard.
