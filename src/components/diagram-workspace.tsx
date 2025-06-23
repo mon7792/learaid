@@ -42,7 +42,7 @@ export default function DiagramWorkspace({ diagramId, initialPrompt }: DiagramWo
   // Generate diagram when component mounts with initial prompt
   useEffect(() => {
     if (initialPrompt.trim()) {
-      // generateDiagram(initialPrompt);
+      generateDiagram(initialPrompt);
     }
   }, [initialPrompt]);
 
@@ -191,7 +191,7 @@ export default function DiagramWorkspace({ diagramId, initialPrompt }: DiagramWo
 
         {/* Excalidraw Canvas */}
         <div className="flex-1 relative">
-          <ExcalidrawWrapper />
+          <ExcalidrawWrapper mermaidCode={mermaidCode} />
         </div>
       </div>
     </>
