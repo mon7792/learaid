@@ -179,17 +179,17 @@ export default function DiagramWorkspace({ diagramId, initialPrompt }: DiagramWo
         </div>
       </header>
 
-      <div className="flex-1 flex">
-        {/* Chat Sidebar */}
-        <div className="w-80 border-r bg-background flex flex-col">
-          {/* Chat Header */}
-          <div className="p-4 border-b">
+      <div className="flex-1 flex overflow-hidden">
+        {/* Chat Sidebar with Fixed Height */}
+        <div className="w-80 border-r bg-background flex flex-col h-full">
+          {/* Chat Header - Fixed Height */}
+          <div className="p-4 border-b flex-shrink-0">
             <h2 className="font-semibold">Diagram Assistant</h2>
             <p className="text-sm text-muted-foreground">Describe your diagram and I'll create it for you</p>
           </div>
 
-          {/* Messages Area */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          {/* Messages Area - Scrollable Content */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
             {messages.length === 0 && (
               <div className="text-center py-8">
                 <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center mx-auto mb-3">
@@ -244,8 +244,8 @@ export default function DiagramWorkspace({ diagramId, initialPrompt }: DiagramWo
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input Area at Bottom */}
-          <div className="border-t p-4">
+          {/* Input Area at Bottom - Fixed Height */}
+          <div className="border-t p-4 flex-shrink-0">
             <form onSubmit={handleSubmit} className="space-y-3">
               <div className="relative">
                 <Input
