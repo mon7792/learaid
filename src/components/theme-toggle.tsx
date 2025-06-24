@@ -1,69 +1,58 @@
-'use client';
+"use client";
+import { useState, useEffect } from "react";
+import { Sun, Moon } from "lucide-react";
+import { useTheme } from "next-themes";
 
-import { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Sun, Moon, Monitor } from 'lucide-react';
-import { useTheme } from '@/contexts/theme-context';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { Toggle } from "@/components/ui/toggle";
 
-export function ThemeToggle() {
-  const { theme, setTheme, effectiveTheme } = useTheme();
+const ThemeModeToggleButton = ({
+  theme,
+  setTheme,
+}: {
+  theme: string;
+  setTheme: (theme: string) => void;
+}) => {
+
+  const handleToggle = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
+  return (
+    <Toggle
+      aria-label="Toggle theme"
+      className="flex items-center space-x-2 cursor-pointer border-2"
+      onPressedChange={handleToggle}
+    >
+      {theme === "light" ? (
+        <Sun className="h-4 w-4" />
+      ) : (
+        <Moon className="h-4 w-4" />
+      )}
+    </Toggle>
+  );
+};
+
+const ThemeModeSwitcher = () => {
+  const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
+  // WIP: think about a better way to handle this:
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const getIcon = () => {
-    switch (effectiveTheme) {
-      case 'light':
-        return <Sun className="w-4 h-4" />;
-      case 'dark':
-        return <Moon className="w-4 h-4" />;
-      default:
-        return <Monitor className="w-4 h-4" />;
-    }
+  const handleSetTheme = (theme: string) => {
+    if (theme) setTheme(theme);
   };
 
+  if (!mounted)
+    return <ThemeModeToggleButton theme="system" setTheme={() => {}} />;
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="w-9 h-9">
-          {mounted && getIcon()}
-          <span className="sr-only">Toggle theme</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-40">
-        <DropdownMenuItem
-          onClick={() => setTheme('light')}
-          className="cursor-pointer"
-        >
-          <Sun className="w-4 h-4 mr-2" />
-          Light
-          {theme === 'light' && <span className="ml-auto">✓</span>}
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => setTheme('dark')}
-          className="cursor-pointer"
-        >
-          <Moon className="w-4 h-4 mr-2" />
-          Dark
-          {theme === 'dark' && <span className="ml-auto">✓</span>}
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => setTheme('system')}
-          className="cursor-pointer"
-        >
-          <Monitor className="w-4 h-4 mr-2" />
-          System
-          {theme === 'system' && <span className="ml-auto">✓</span>}
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <ThemeModeToggleButton
+      theme={resolvedTheme || "system"}
+      setTheme={handleSetTheme}
+    />
   );
-}
+};
+
+export { ThemeModeSwitcher };

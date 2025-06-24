@@ -1,8 +1,10 @@
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import { ThemeProvider } from "@/contexts/theme-context";
 import { Suspense } from "react";
 import { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+
+import { ThemeProvider } from "@/contexts/theme-context";
+
+import "./globals.css";
 
 const geistSans = Geist({
   subsets: ["latin"],
@@ -24,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <body>
         <ThemeProvider>
           <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
