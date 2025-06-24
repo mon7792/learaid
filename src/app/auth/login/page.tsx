@@ -1,28 +1,15 @@
-"use client";
-
-import { Sparkles, Github, ArrowRight, Zap, Palette, Brain } from "lucide-react";
+import { Sparkles, Zap, Palette, Brain } from "lucide-react";
 import Link from "next/link";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-
-import { authClient } from "@/lib/auth-client";
+import { Card, CardContent } from "@/components/ui/card";
+import { Github } from "@/features/auth/components/Github";
 
 export default function LoginPage() {
-  const handleSignIn = async () => {
-    await authClient.signIn.social({ provider: "github", callbackURL: "/" });
-  };
 
   return (
     <div className="min-h-screen flex">
       {/* Left Side - Hero Section */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary/20 via-primary/10 to-background relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary/20 via-primary/10 to-background relative overflow-hidden justify-center">
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
         <div className="relative z-10 flex flex-col justify-center items-center p-12 text-center">
           <div className="space-y-8">
@@ -41,7 +28,8 @@ export default function LoginPage() {
                 <span className="text-primary block">Beautiful Diagrams</span>
               </h1>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Harness the power of AI to convert your thoughts into professional diagrams instantly. No design skills required.
+                Harness the power of AI to convert your thoughts into
+                professional diagrams instantly. No design skills required.
               </p>
             </div>
 
@@ -100,28 +88,9 @@ export default function LoginPage() {
 
           {/* Login Card */}
           <Card className="border-0 shadow-xl bg-card/50 backdrop-blur-sm">
-            <CardHeader className="text-center pb-2">
-              <CardTitle className="text-xl">Sign in to your account</CardTitle>
-              <CardDescription>
-                Continue your diagram creation journey
-              </CardDescription>
-            </CardHeader>
             <CardContent className="space-y-6">
-              {/* GitHub Login Button */}
-              <Button
-                onClick={handleSignIn}
-                className="w-full h-12 text-base font-medium group relative overflow-hidden"
-                size="lg"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-gray-800 transition-transform group-hover:scale-105"></div>
-                <div className="relative flex items-center justify-center gap-3">
-                  <Github className="w-5 h-5" />
-                  <span>Continue with GitHub</span>
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                </div>
-              </Button>
+              <Github />
 
-              {/* Divider */}
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-border/50"></div>
@@ -154,23 +123,32 @@ export default function LoginPage() {
           {/* Footer Links */}
           <div className="text-center space-y-4">
             <p className="text-sm text-muted-foreground">
-              Don't have an account?{" "}
-              <Link 
-                href="/auth/signup" 
+              Don&apos;t have an account?{" "}
+              <Link
+                href="/auth/signup"
                 className="text-primary font-medium hover:underline transition-colors"
               >
                 Create one for free
               </Link>
             </p>
-            
+
             <div className="flex justify-center gap-6 text-xs text-muted-foreground">
-              <Link href="/privacy-policy" className="hover:text-foreground transition-colors">
+              <Link
+                href="/privacy-policy"
+                className="hover:text-foreground transition-colors"
+              >
                 Privacy Policy
               </Link>
-              <Link href="/terms-and-conditions" className="hover:text-foreground transition-colors">
+              <Link
+                href="/terms-and-conditions"
+                className="hover:text-foreground transition-colors"
+              >
                 Terms of Service
               </Link>
-              <Link href="/support" className="hover:text-foreground transition-colors">
+              <Link
+                href="/support"
+                className="hover:text-foreground transition-colors"
+              >
                 Support
               </Link>
             </div>
