@@ -25,9 +25,11 @@ const Avatar = memo<{ role: "user" | "ai" }>(({ role }) => {
   const isUser = role === "user";
   const Icon = isUser ? User : Bot;
   const bgClass = isUser ? "bg-secondary" : "bg-primary";
-  
+
   return (
-    <div className={`w-8 h-8 ${bgClass} rounded-full flex items-center justify-center flex-shrink-0`}>
+    <div
+      className={`w-8 h-8 ${bgClass} rounded-full flex items-center justify-center flex-shrink-0`}
+    >
       <Icon className="w-4 h-4" />
     </div>
   );
@@ -47,14 +49,19 @@ MermaidCodeBlock.displayName = "MermaidCodeBlock";
 // Memoized individual message component
 const MessageItem = memo<{ message: ChatMessage }>(({ message }) => {
   const isUser = message.role === "user";
-  
-  const formatTime = useCallback((date: Date) => {
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+  const formatTime = useCallback((date: Date | string) => {
+    // Ensure we have a Date object
+    const dateObj = date instanceof Date ? date : new Date(date);
+    return dateObj.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   }, []);
 
   const messageClasses = useMemo(() => {
     const baseClasses = "p-3 rounded-lg";
-    return isUser 
+    return isUser
       ? `${baseClasses} bg-primary text-primary-foreground ml-auto`
       : `${baseClasses} bg-muted`;
   }, [isUser]);
@@ -68,21 +75,21 @@ const MessageItem = memo<{ message: ChatMessage }>(({ message }) => {
   }, [isUser]);
 
   const timeClasses = useMemo(() => {
-    return `text-xs text-muted-foreground mt-1 ${isUser ? "text-right" : "text-left"}`;
+    return `text-xs text-muted-foreground mt-1 ${
+      isUser ? "text-right" : "text-left"
+    }`;
   }, [isUser]);
 
   return (
     <div className={containerClasses}>
       {!isUser && <Avatar role="ai" />}
-      
+
       <div className={contentClasses}>
         <div className={messageClasses}>
           <p className="text-sm whitespace-pre-wrap">{message.message}</p>
           {message.mermaid && <MermaidCodeBlock mermaid={message.mermaid} />}
         </div>
-        <div className={timeClasses}>
-          {formatTime(message.timestamp)}
-        </div>
+        <div className={timeClasses}>{formatTime(message.timestamp)}</div>
       </div>
 
       {isUser && <Avatar role="user" />}

@@ -10,7 +10,7 @@ import { useGenerateDiagram } from "@/features/diagram/api/mutation";
 import { chatSchema } from "@/features/diagram/schema";
 
 export const useChatInput = () => {
-  const { setMessages, messages } = useStore();
+  const { setMessages, messages, setMermaid } = useStore();
   
   const form = useForm<z.infer<typeof chatSchema>>({
     resolver: zodResolver(chatSchema),
@@ -22,12 +22,12 @@ export const useChatInput = () => {
   const { mutate: generateDiagram, isPending } = useGenerateDiagram(
     (data) => {
       console.log("data", data);
-      removeGeneratingMessage();
+      addAiMessage(data.message, data.mermaid);
+      setMermaid(data.mermaid || null);
       form.reset();
     },
     (error) => {
       console.error("error", error);
-      removeGeneratingMessage();
     }
   );
 
@@ -41,25 +41,21 @@ export const useChatInput = () => {
     setMessages([...messages, userMessage]);
   };
 
-  const addGeneratingMessage = () => {
-    const generatingMessage: ChatMessage = {
-      id: "generating",
+  const addAiMessage = (content: string, mermaid?: string) => {
+    const aiMessage: ChatMessage = {
+      id: Date.now().toString(),
       role: "ai",
-      message: "Generating your diagram...",
+      message: content,
+      mermaid: mermaid,
       timestamp: new Date(),
     };
-    setMessages([...messages, generatingMessage]);
-  };
-
-  const removeGeneratingMessage = () => {
-    setMessages(messages.filter((msg: ChatMessage) => msg.id !== "generating"));
+    setMessages([...messages, aiMessage]);
   };
 
   const onSubmit = (values: z.infer<typeof chatSchema>) => {
     if (!values.message.trim() || isPending) return;
 
     addUserMessage(values.message);
-    addGeneratingMessage();
     generateDiagram(values.message);
   };
 

@@ -6,9 +6,11 @@ import { StateCreator } from "zustand";
 type DiagramSlice = {
   id: string | null;
   name: string | null;
+  mermaid: string | null;
   setDiagram: (id: string, name: string) => void;
   messages: ChatMessage[];
   setMessages: (messages: ChatMessage[]) => void;
+  setMermaid: (mermaid: string | null) => void;
 };
 
 export const createDiagramSlice: StateCreator<
@@ -25,5 +27,9 @@ export const createDiagramSlice: StateCreator<
   },
   setDiagram: (id: string, name: string) => {
     set({ id, name });
+  },
+  mermaid: null,
+  setMermaid: (mermaid: string | null) => {
+    set({ mermaid });
   },
 });

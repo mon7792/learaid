@@ -1,5 +1,6 @@
 'use client';
 
+import { useTheme } from "next-themes";
 import { useState, useEffect } from 'react';
 import {
   Excalidraw,
@@ -7,25 +8,25 @@ import {
 } from "@excalidraw/excalidraw";
 import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
 import { parseMermaidToExcalidraw } from "@excalidraw/mermaid-to-excalidraw";
-import "@excalidraw/excalidraw/index.css";
-import { useTheme } from "next-themes";
 
-interface ExcalidrawWrapperProps {
-  mermaidCode?: string;
-}
+import { useStore } from "@/store";
+
+import "@excalidraw/excalidraw/index.css";
+
 
 const defaultMermaidCode = `
 graph TD
 A[Start] --> B[Stop]
 `;
 
-export default function ExcalidrawWrapper({ mermaidCode = defaultMermaidCode }: ExcalidrawWrapperProps) {
+export default function ExcalidrawWrapper() {
+  const { resolvedTheme } = useTheme();
+  const { mermaid } = useStore();
   const [isConverting, setIsConverting] = useState(true);
   const [excalidrawAPI, setExcalidrawAPI] = useState<ExcalidrawImperativeAPI | null>(null);
-  const { resolvedTheme } = useTheme();
 
   useEffect(() => {
-    if (!excalidrawAPI || !mermaidCode) {
+    if (!excalidrawAPI) {
       return;
     }
 
@@ -34,7 +35,7 @@ export default function ExcalidrawWrapper({ mermaidCode = defaultMermaidCode }: 
     const convertAndCenter = async () => {
       setIsConverting(true);
       try {
-        const { elements: skeletonElements, files: excalidrawFiles } = await parseMermaidToExcalidraw(mermaidCode, {});
+        const { elements: skeletonElements, files: excalidrawFiles } = await parseMermaidToExcalidraw(mermaid || defaultMermaidCode, {});
         
         if (isCancelled) return;
         
@@ -66,7 +67,7 @@ export default function ExcalidrawWrapper({ mermaidCode = defaultMermaidCode }: 
     return () => {
       isCancelled = true;
     };
-  }, [mermaidCode, excalidrawAPI]);
+  }, [excalidrawAPI, mermaid]);
 
   return (
     <div className="h-full w-full relative">
