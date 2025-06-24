@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Sparkles, ArrowLeft, Plus } from 'lucide-react';
 import Link from 'next/link';
 import { SubscriptionStatus } from '@/components/subscription-status';
+import {Checkout} from '@/features/billing/components/Checkout';
 
 export default function DashboardPage() {
 
@@ -46,6 +47,7 @@ export default function DashboardPage() {
             {/* Subscription Status */}
             <div className="lg:col-span-1">
               <SubscriptionStatus />
+              <Checkout />
             </div>
 
             {/* Quick Actions */}
