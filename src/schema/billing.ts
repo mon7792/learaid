@@ -7,9 +7,8 @@ import { user } from "./auth";
  * ref: https://www.pedroalonso.net/blog/implementing-pre-paid-usage-billing-with-nextjs-and-stripe/
  * */ 
 
-
 // subscription
-export const planEnum = pgEnum("plan", ["trial", "pro"]);
+export const planEnum = pgEnum("plan", ["base", "pro"]);
 export const statusEnum = pgEnum("status", ["PENDING", "COMPLETED", "FAILED"]);
 
 // user_billing
@@ -18,7 +17,7 @@ export const userBilling = pgTable("user_billing", {
     userId: text("user_id").notNull().references(() => user.id),
 	tokens: integer("tokens").notNull().default(0),
 	stripeCustomerId: text("stripe_customer_id"),
-	plan: planEnum("plan").notNull().default("trial"),
+	plan: planEnum("plan").notNull().default("base"),
 	lastBilledAt: timestamp("last_billed_at"),
     createdAt: timestamp("created_at").notNull().default(sql`now()`),
     updatedAt: timestamp("updated_at").notNull().default(sql`now()`),
@@ -33,7 +32,6 @@ export const userUsage = pgTable("user_usage", {
 	success: boolean("success").notNull(),
 	error: json("error"),
 }); 
-
 
 export const userPurchase = pgTable("user_purchase", {
 	id: char("id", { length: 26 }).primaryKey(),

@@ -3,6 +3,8 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 
 import { db } from "@/config/db";
+import { tryCatch } from "@/utils/error";
+import { createUserBilling } from "@/features/auth/model";
 
 export const auth = betterAuth({
   socialProviders: {
@@ -16,4 +18,16 @@ export const auth = betterAuth({
     provider: "pg",
   }),
   plugins: [nextCookies()],
+  databaseHooks: {
+    user: {
+        create: {
+            after: async (user) => {
+                const result = await tryCatch(createUserBilling(user.id));
+                if (result.error) {
+                    console.error(`error: creating trial for user ${user.id}: ${result.error}`);
+                }
+            },
+        },
+    },
+},
 });

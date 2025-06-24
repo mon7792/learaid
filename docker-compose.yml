@@ -1,0 +1,16 @@
+services:
+  learaid_postgres:
+    container_name: learaid_postgres
+    image: postgres:16
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: learaid
+      POSTGRES_PASSWORD: learaid
+      POSTGRES_DB: learaid
+    volumes:
+      - learaid_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  learaid_postgres_data:
