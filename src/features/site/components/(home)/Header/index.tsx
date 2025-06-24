@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
 
-import { signOut, useSession } from "@/lib/auth-client";
+import { useSession } from "@/lib/auth-client";
 
 import { ThemeModeSwitcher } from "@/components/theme-toggle";
+import { UserProfile } from "@/features/auth/components/UserProfile";
+
 import { Button } from "@/components/ui/button";
 
 export const Header = () => {
@@ -19,27 +21,16 @@ export const Header = () => {
         <span className="text-xl font-bold">Learaid</span>
       </div>
       <div className="flex gap-3">
-        <Link href="/pricing">
-          <Button variant="outline" className="cursor-pointer">
-            buy
-          </Button>
-        </Link>
+        <ThemeModeSwitcher />
         {session ? (
           <>
-            <Button
-              variant="default"
-              onClick={() => signOut()}
-              className="cursor-pointer"
-            >
-              Sign Out
-            </Button>
+            <UserProfile />
           </>
         ) : (
           <Link href="/auth/login">
             <Button className="cursor-pointer">Sign In</Button>
           </Link>
         )}
-        <ThemeModeSwitcher />
       </div>
     </header>
   );
