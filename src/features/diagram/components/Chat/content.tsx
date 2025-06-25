@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useMemo, useCallback, memo } from "react";
-import { Sparkles, User, Bot } from "lucide-react";
+import { Sparkles, User, Bot, Play } from "lucide-react";
 
 import { useStore } from "@/store";
 import { ChatMessage } from "@/features/diagram/types";
+import { Button } from "@/components/ui/button";
 
 // Memoized empty state component
 const EmptyState = memo(() => (
@@ -38,9 +39,16 @@ const Avatar = memo<{ role: "user" | "ai" }>(({ role }) => {
 Avatar.displayName = "Avatar";
 
 // Memoized mermaid code block component
-const MermaidCodeBlock = memo<{ mermaid: string }>(({ mermaid }) => (
-  <div className="mt-2 p-2 bg-background/10 rounded text-xs font-mono overflow-x-auto">
+const MermaidCodeBlock = memo<{ mermaid: string, updateMermaid: (mermaid: string) => void }>(({ mermaid, updateMermaid }) => (
+  <div className="flex flex-col gap-2">
+  <div className="mt-2 p-2 bg-background/10 rounded text-xs font-mono overflow-x-auto border-2">
     <pre className="whitespace-pre-wrap">{mermaid}</pre>
+  </div>
+  <div className="flex justify-end">
+    <Button variant="outline" size="icon" className="cursor-pointer" onClick={() => updateMermaid(mermaid)}>
+      <Play className="w-4 h-4" />
+    </Button>
+  </div>
   </div>
 ));
 
@@ -48,6 +56,7 @@ MermaidCodeBlock.displayName = "MermaidCodeBlock";
 
 // Memoized individual message component
 const MessageItem = memo<{ message: ChatMessage }>(({ message }) => {
+  const { setMermaid } = useStore();
   const isUser = message.role === "user";
 
   const formatTime = useCallback((date: Date | string) => {
@@ -58,6 +67,11 @@ const MessageItem = memo<{ message: ChatMessage }>(({ message }) => {
       minute: "2-digit",
     });
   }, []);
+
+  const updateMermaid = useCallback((mermaid: string) => {
+    console.log("update mermaid", mermaid);
+    setMermaid(mermaid);
+  }, [setMermaid]);
 
   const messageClasses = useMemo(() => {
     const baseClasses = "p-3 rounded-lg";
@@ -79,6 +93,7 @@ const MessageItem = memo<{ message: ChatMessage }>(({ message }) => {
       isUser ? "text-right" : "text-left"
     }`;
   }, [isUser]);
+  
 
   return (
     <div className={containerClasses}>
@@ -87,7 +102,7 @@ const MessageItem = memo<{ message: ChatMessage }>(({ message }) => {
       <div className={contentClasses}>
         <div className={messageClasses}>
           <p className="text-sm whitespace-pre-wrap">{message.message}</p>
-          {message.mermaid && <MermaidCodeBlock mermaid={message.mermaid} />}
+          {message.mermaid && <MermaidCodeBlock mermaid={message.mermaid} updateMermaid={updateMermaid} />}
         </div>
         <div className={timeClasses}>{formatTime(message.timestamp)}</div>
       </div>
