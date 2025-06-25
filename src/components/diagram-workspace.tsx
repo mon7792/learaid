@@ -1,13 +1,17 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import dynamic from "next/dynamic";
 import { Sparkles, Home, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { ThemeModeSwitcher } from "@/components/theme-toggle";
-import "@excalidraw/excalidraw/index.css";
+import { useEffect } from "react";
 
-import dynamic from "next/dynamic";
+import { useHydratedStore } from "@/store";
+
+import { ThemeModeSwitcher } from "@/components/theme-toggle";
 import { Chat } from "@/features/diagram/components/Chat";
+import { Button } from "@/components/ui/button";
+
+import "@excalidraw/excalidraw/index.css";
 
 // Dynamically import Excalidraw to avoid SSR issues
 const ExcalidrawWrapper = dynamic(
@@ -30,6 +34,39 @@ interface DiagramWorkspaceProps {
 }
 
 export default function DiagramWorkspace({ diagramId }: DiagramWorkspaceProps) {
+  // this temporary solution to set the diagram id in the store
+  const { setCurrentDiagramId, setDiagrams, isHydrated } = useHydratedStore();
+
+  useEffect(() => {
+    // Only initialize when the store is hydrated
+    if (isHydrated) {
+      console.log("Initializing diagram with ID:", diagramId);
+      // Set the current diagram ID
+      setCurrentDiagramId(diagramId);
+      
+      // Initialize the diagram in the store if it doesn't exist
+      setDiagrams((currentDiagrams) => {
+        const diagramExists = currentDiagrams.some(d => d.id === diagramId);
+        if (!diagramExists) {
+          return [...currentDiagrams, { id: diagramId, name: diagramId, messages: [] }];
+        }
+        return currentDiagrams;
+      });
+    }
+  }, [diagramId, setCurrentDiagramId, setDiagrams, isHydrated]);
+
+  // Show loading state while store is hydrating
+  if (!isHydrated) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <Loader2 className="w-8 h-8 animate-spin mx-auto text-muted-foreground" />
+          <p className="text-muted-foreground">Loading diagram workspace...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <header className="flex items-center justify-between p-4 border-b bg-background/95 backdrop-blur">

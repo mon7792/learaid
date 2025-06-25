@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useMemo } from "react";
 
 import { useStore } from "@/store";
 import { ChatMessage } from "@/features/diagram/types";
@@ -10,7 +11,12 @@ import { useGenerateDiagram } from "@/features/diagram/api/mutation";
 import { chatSchema } from "@/features/diagram/schema";
 
 export const useChatInput = () => {
-  const { setMessages, messages, setMermaid } = useStore();
+  const { setMessages, setMermaid, id, diagrams } = useStore();
+
+  const messages = useMemo(() => {
+    if (!id) return [];
+    return diagrams.find((diagram) => diagram.id === id)?.messages || [];
+  }, [diagrams, id]);
   
   const form = useForm<z.infer<typeof chatSchema>>({
     resolver: zodResolver(chatSchema),
@@ -32,6 +38,8 @@ export const useChatInput = () => {
   );
 
   const addUserMessage = (content: string) => {
+    if (!id) return;
+    
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
       role: "user",
@@ -42,6 +50,8 @@ export const useChatInput = () => {
   };
 
   const addAiMessage = (content: string, mermaid?: string) => {
+    if (!id) return;
+    
     const aiMessage: ChatMessage = {
       id: Date.now().toString(),
       role: "ai",
@@ -53,9 +63,11 @@ export const useChatInput = () => {
   };
 
   const onSubmit = (values: z.infer<typeof chatSchema>) => {
-    if (!values.message.trim() || isPending) return;
+    if (!values.message.trim() || isPending || !id) return;
 
+    console.log(`Submitting with ID: ${id}`);
     addUserMessage(values.message);
+    
     generateDiagram(values.message);
   };
 
@@ -65,6 +77,6 @@ export const useChatInput = () => {
     form,
     isPending,
     handleSubmit,
-    isFormValid: form.formState.isValid,
+    isFormValid: form.formState.isValid && !!id,
   };
 };

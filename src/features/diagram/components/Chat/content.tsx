@@ -39,16 +39,24 @@ const Avatar = memo<{ role: "user" | "ai" }>(({ role }) => {
 Avatar.displayName = "Avatar";
 
 // Memoized mermaid code block component
-const MermaidCodeBlock = memo<{ mermaid: string, updateMermaid: (mermaid: string) => void }>(({ mermaid, updateMermaid }) => (
+const MermaidCodeBlock = memo<{
+  mermaid: string;
+  updateMermaid: (mermaid: string) => void;
+}>(({ mermaid, updateMermaid }) => (
   <div className="flex flex-col gap-2">
-  <div className="mt-2 p-2 bg-background/10 rounded text-xs font-mono overflow-x-auto border-2">
-    <pre className="whitespace-pre-wrap">{mermaid}</pre>
-  </div>
-  <div className="flex justify-end">
-    <Button variant="outline" size="icon" className="cursor-pointer" onClick={() => updateMermaid(mermaid)}>
-      <Play className="w-4 h-4" />
-    </Button>
-  </div>
+    <div className="mt-2 p-2 bg-background/10 rounded text-xs font-mono overflow-x-auto border-2">
+      <pre className="whitespace-pre-wrap">{mermaid}</pre>
+    </div>
+    <div className="flex justify-end">
+      <Button
+        variant="outline"
+        size="icon"
+        className="cursor-pointer"
+        onClick={() => updateMermaid(mermaid)}
+      >
+        <Play className="w-4 h-4" />
+      </Button>
+    </div>
   </div>
 ));
 
@@ -68,10 +76,13 @@ const MessageItem = memo<{ message: ChatMessage }>(({ message }) => {
     });
   }, []);
 
-  const updateMermaid = useCallback((mermaid: string) => {
-    console.log("update mermaid", mermaid);
-    setMermaid(mermaid);
-  }, [setMermaid]);
+  const updateMermaid = useCallback(
+    (mermaid: string) => {
+      console.log("update mermaid", mermaid);
+      setMermaid(mermaid);
+    },
+    [setMermaid]
+  );
 
   const messageClasses = useMemo(() => {
     const baseClasses = "p-3 rounded-lg";
@@ -93,7 +104,6 @@ const MessageItem = memo<{ message: ChatMessage }>(({ message }) => {
       isUser ? "text-right" : "text-left"
     }`;
   }, [isUser]);
-  
 
   return (
     <div className={containerClasses}>
@@ -102,7 +112,12 @@ const MessageItem = memo<{ message: ChatMessage }>(({ message }) => {
       <div className={contentClasses}>
         <div className={messageClasses}>
           <p className="text-sm whitespace-pre-wrap">{message.message}</p>
-          {message.mermaid && <MermaidCodeBlock mermaid={message.mermaid} updateMermaid={updateMermaid} />}
+          {message.mermaid && (
+            <MermaidCodeBlock
+              mermaid={message.mermaid}
+              updateMermaid={updateMermaid}
+            />
+          )}
         </div>
         <div className={timeClasses}>{formatTime(message.timestamp)}</div>
       </div>
@@ -115,8 +130,13 @@ const MessageItem = memo<{ message: ChatMessage }>(({ message }) => {
 MessageItem.displayName = "MessageItem";
 
 export const ChatContent = () => {
-  const { messages } = useStore();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { id, diagrams } = useStore();
+  
+  const messages = useMemo(() => {
+    if (!id) return [];
+    return diagrams.find((diagram) => diagram.id === id)?.messages || [];
+  }, [diagrams, id]);
 
   // Optimized scroll effect with useCallback
   const scrollToBottom = useCallback(() => {
@@ -129,12 +149,12 @@ export const ChatContent = () => {
 
   // Memoized messages list to prevent unnecessary re-renders
   const messagesList = useMemo(() => {
-    return messages.map((message: ChatMessage) => (
+    return messages?.map((message: ChatMessage) => (
       <MessageItem key={message.id} message={message} />
     ));
   }, [messages]);
 
-  if (messages.length === 0) {
+  if (!messages || messages.length === 0) {
     return <EmptyState />;
   }
 

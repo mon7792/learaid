@@ -1,15 +1,45 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, devtools } from "zustand/middleware";
+import { useEffect, useState } from "react";
 
 import { createDiagramSlice } from "./diagram/diagram.slice";
+import { createHydrationSlice } from "./hydration/hydration.slice";
 
-export const useStore = create<ReturnType<typeof createDiagramSlice>>()(
-  persist(
-    (...a) => ({
-      ...createDiagramSlice(...a),
-    }),
+export const useStore = create<
+  ReturnType<typeof createHydrationSlice> &
+    ReturnType<typeof createDiagramSlice>
+>()(
+  devtools(
+    persist(
+      (...a) => ({
+        ...createDiagramSlice(...a),
+        ...createHydrationSlice(...a),
+      }),
+      {
+        name: "learaid-storage",
+        onRehydrateStorage: () => (state) => {
+          if (state) {
+            state.setHydrated(true);
+          }
+        },
+      }
+    ),
     {
-      name: "learaid-storage",
+      name: "learaid-store",
     }
   )
 );
+
+// Custom hook to ensure store is hydrated before use
+export const useHydratedStore = () => {
+  const [isHydrated, setIsHydrated] = useState(false);
+  const store = useStore();
+
+  useEffect(() => {
+    if (store.isHydrated) {
+      setIsHydrated(true);
+    }
+  }, [store.isHydrated]);
+
+  return { ...store, isHydrated };
+};
