@@ -12,6 +12,7 @@ import { Chat } from "@/features/diagram/components/Chat";
 import { Button } from "@/components/ui/button";
 
 import "@excalidraw/excalidraw/index.css";
+import { useListMessages } from "@/features/diagram/api/query";
 
 // Dynamically import Excalidraw to avoid SSR issues
 const ExcalidrawWrapper = dynamic(
@@ -35,7 +36,13 @@ interface DiagramWorkspaceProps {
 
 export default function DiagramWorkspace({ diagramId }: DiagramWorkspaceProps) {
   // this temporary solution to set the diagram id in the store
-  const { setCurrentDiagramId, setDiagrams, isHydrated } = useHydratedStore();
+  const {
+    data: diagramData,
+    isLoading: isLoadingDiagram,
+    refetch: refetchDiagram,
+  } = useListMessages(diagramId, false);
+  const { setCurrentDiagramId, setDiagrams, isHydrated, diagrams } =
+    useHydratedStore();
 
   useEffect(() => {
     // Only initialize when the store is hydrated
@@ -43,20 +50,38 @@ export default function DiagramWorkspace({ diagramId }: DiagramWorkspaceProps) {
       console.log("Initializing diagram with ID:", diagramId);
       // Set the current diagram ID
       setCurrentDiagramId(diagramId);
-      
-      // Initialize the diagram in the store if it doesn't exist
+
+      // check if the diagram exists
+      const diagramExists = diagrams.some((d) => d.id === diagramId);
+      if (!diagramExists) {
+        refetchDiagram();
+      }
+    }
+  }, [diagramId, setCurrentDiagramId, isHydrated, refetchDiagram, diagrams]);
+
+  useEffect(() => {
+    if (diagramData) {
       setDiagrams((currentDiagrams) => {
-        const diagramExists = currentDiagrams.some(d => d.id === diagramId);
+        const diagramExists = currentDiagrams.some((d) => d.id === diagramId);
         if (!diagramExists) {
-          return [...currentDiagrams, { id: diagramId, name: diagramId, messages: [] }];
+          return [
+            ...currentDiagrams,
+            { id: diagramId, name: diagramData.title, messages: diagramData.messages || [] },
+          ];
+        } else {
+          return currentDiagrams.map((d) => {
+            if (d.id === diagramId) {
+              return { ...d, name: diagramData.title, messages: diagramData.messages || [] };
+            }
+            return d;
+          });
         }
-        return currentDiagrams;
       });
     }
-  }, [diagramId, setCurrentDiagramId, setDiagrams, isHydrated]);
+  }, [diagramData, setDiagrams, diagramId]);
 
   // Show loading state while store is hydrating
-  if (!isHydrated) {
+  if (!isHydrated || isLoadingDiagram) {
     return (
       <div className="h-screen flex items-center justify-center">
         <div className="text-center space-y-4">
@@ -67,6 +92,10 @@ export default function DiagramWorkspace({ diagramId }: DiagramWorkspaceProps) {
     );
   }
 
+  return <DiagramSection />;
+}
+
+const DiagramSection = () => {
   return (
     <>
       <header className="flex items-center justify-between p-4 border-b bg-background/95 backdrop-blur">
@@ -80,9 +109,7 @@ export default function DiagramWorkspace({ diagramId }: DiagramWorkspaceProps) {
             </div>
             <span className="font-semibold">Learaid</span>
           </Link>
-          <div className="text-sm text-muted-foreground">
-            Diagram #{diagramId}
-          </div>
+          <div className="text-sm text-muted-foreground">Diagram</div>
         </div>
 
         <div className="flex items-center gap-2">
@@ -106,4 +133,4 @@ export default function DiagramWorkspace({ diagramId }: DiagramWorkspaceProps) {
       </main>
     </>
   );
-}
+};

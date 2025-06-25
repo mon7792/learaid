@@ -17,7 +17,7 @@ export const useChatInput = () => {
     if (!id) return [];
     return diagrams.find((diagram) => diagram.id === id)?.messages || [];
   }, [diagrams, id]);
-  
+
   const form = useForm<z.infer<typeof chatSchema>>({
     resolver: zodResolver(chatSchema),
     defaultValues: {
@@ -28,7 +28,7 @@ export const useChatInput = () => {
   const { mutate: generateDiagram, isPending } = useGenerateDiagram(
     (data) => {
       console.log("data", data);
-      addAiMessage(data.message, data.mermaid);
+      addAiMessage(data);
       setMermaid(data.mermaid || null);
       form.reset();
     },
@@ -39,7 +39,7 @@ export const useChatInput = () => {
 
   const addUserMessage = (content: string) => {
     if (!id) return;
-    
+
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
       role: "user",
@@ -49,26 +49,17 @@ export const useChatInput = () => {
     setMessages([...messages, userMessage]);
   };
 
-  const addAiMessage = (content: string, mermaid?: string) => {
+  const addAiMessage = (message: ChatMessage) => {
     if (!id) return;
-    
-    const aiMessage: ChatMessage = {
-      id: Date.now().toString(),
-      role: "ai",
-      message: content,
-      mermaid: mermaid,
-      timestamp: new Date(),
-    };
-    setMessages([...messages, aiMessage]);
+    setMessages([...messages, message]);
   };
 
   const onSubmit = (values: z.infer<typeof chatSchema>) => {
     if (!values.message.trim() || isPending || !id) return;
 
-    console.log(`Submitting with ID: ${id}`);
     addUserMessage(values.message);
-    
-    generateDiagram(values.message);
+
+    generateDiagram({ id, message: values.message });
   };
 
   const handleSubmit = form.handleSubmit(onSubmit);
