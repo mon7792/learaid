@@ -1,7 +1,12 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { BadgeCheck, Bell, LogOut } from "lucide-react";
+
+import { signOut } from "@/lib/auth-client";
+import { useStore } from "@/store";
+import { useGetUserInfo } from "@/features/auth/api/query";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -13,28 +18,42 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {signOut,  useSession } from "@/lib/auth-client";
 
 export function UserProfile() {
-  const { data: session, isPending } = useSession();
+  const { user, setUserResponse } = useStore();
+
+  const { data: userInfo, refetch: refetchUserInfo } = useGetUserInfo(!!user);
 
   const handleLogout = () => {
     signOut();
   };
+
+  useEffect(() => {
+    if (!user) {
+      refetchUserInfo();
+    }
+  }, [user, refetchUserInfo]);
+
+  useEffect(() => {
+    if (userInfo) {
+      setUserResponse(userInfo);
+    }
+  }, [userInfo, setUserResponse]);
+
   return (
     <section>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <div className="flex flex-col items-center relative">
             <Avatar className="h-10 w-10 rounded-full border-2 border-gray-300 cursor-pointer">
-            <AvatarImage
-                  src={session?.user.image || ""}
-                  alt={session?.user.name || "avatar"}
-                />
-                <AvatarFallback className="rounded-lg">LR</AvatarFallback>
+              <AvatarImage
+                src={user?.image || ""}
+                alt={user?.name || "avatar"}
+              />
+              <AvatarFallback className="rounded-lg">LR</AvatarFallback>
             </Avatar>
             <div className="absolute -bottom-2 px-2 py-0.5 bg-black text-white text-[10px] font-bold rounded-full">
-              {session?.user.id ? "BASE" : "PRO"}
+              {user?.plan === "base" ? "BASE" : "PRO"}
             </div>
           </div>
         </DropdownMenuTrigger>
@@ -47,16 +66,16 @@ export function UserProfile() {
             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
               <Avatar className="h-8 w-8 rounded-lg border-2 border-gray-300 ">
                 <AvatarImage
-                  src={session?.user.image || ""}
-                  alt={session?.user.name || "avatar"}
+                  src={user?.image || ""}
+                  alt={user?.name || "avatar"}
                 />
                 <AvatarFallback className="rounded-lg">IA</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">
-                  {session?.user.name || ""}
+                  {user?.name || ""}
                 </span>
-                <span className="truncate text-xs">{session?.user.email || ""}</span>
+                <span className="truncate text-xs">{user?.email || ""}</span>
               </div>
             </div>
           </DropdownMenuLabel>
@@ -76,9 +95,9 @@ export function UserProfile() {
             </Link>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={handleLogout} disabled={isPending}>
+          <DropdownMenuItem onClick={handleLogout}>
             <LogOut />
-            {isPending ? "Logging out..." : "Log out"}
+            Log out
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

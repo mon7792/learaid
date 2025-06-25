@@ -4,16 +4,19 @@ import { useEffect, useState } from "react";
 
 import { createDiagramSlice } from "./diagram/diagram.slice";
 import { createHydrationSlice } from "./hydration/hydration.slice";
+import { createUserSlice } from "./user/user.slice";
 
 export const useStore = create<
   ReturnType<typeof createHydrationSlice> &
-    ReturnType<typeof createDiagramSlice>
+    ReturnType<typeof createDiagramSlice> &
+    ReturnType<typeof createUserSlice>
 >()(
   devtools(
     persist(
       (...a) => ({
         ...createDiagramSlice(...a),
         ...createHydrationSlice(...a),
+        ...createUserSlice(...a),
       }),
       {
         name: "learaid-storage",
