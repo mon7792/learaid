@@ -22,18 +22,22 @@ import {
 export function UserProfile() {
   const { user, setUserResponse } = useStore();
 
-  const { data: userInfo, refetch: refetchUserInfo } = useGetUserInfo(!!user);
+  const { data: userInfo, refetch: refetchUserInfo } = useGetUserInfo(
+    user === null
+  );
 
   const handleLogout = () => {
     signOut();
   };
 
+  // user is null . the refetch will be triggered
   useEffect(() => {
-    if (!user) {
+    if (user === null) {
       refetchUserInfo();
     }
   }, [user, refetchUserInfo]);
 
+  // userInfo is not null. the user will be updated
   useEffect(() => {
     if (userInfo) {
       setUserResponse(userInfo);
