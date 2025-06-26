@@ -72,7 +72,9 @@ export default function DashboardPage() {
                   Manage and view all your created diagrams
                 </p>
               </div>
-              <NewDiagram />
+              <div className="max-w-xs">
+                <NewDiagram />
+              </div>
             </div>
             <DiagramTable />
           </div>

@@ -2,12 +2,15 @@
 
 import { useState } from "react";
 
+import { Sidebar } from "@/components/sidebar";
+
 import { Header } from "@/features/site/components/(home)/Header";
 import { Footer } from "@/features/site/components/(home)/Footer";
 import { Content } from "@/features/site/components/(home)/Content";
-import { Sidebar } from "@/components/sidebar";
 
 export default function Home() {
+
+  // TODO: move this to the store
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -19,7 +22,7 @@ export default function Home() {
       <Sidebar isOpen={sidebarOpen} onToggle={toggleSidebar} />
       
       <div className={`flex-1 transition-all duration-300 ${sidebarOpen ? 'md:ml-64' : 'md:ml-16'}`}>
-        <Header onSidebarToggle={toggleSidebar} />
+        <Header />
         <Content />
         <Footer />
       </div>

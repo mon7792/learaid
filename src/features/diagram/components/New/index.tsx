@@ -9,7 +9,11 @@ import { useHydratedStore } from "@/store";
 
 import { Button } from "@/components/ui/button";
 
-export const NewDiagram = () => {
+type NewDiagramProps = {
+  variant?:  "default" | "icon" | "outline";
+};
+
+export const NewDiagram = ({ variant = "default" }: NewDiagramProps) => {
   const router = useRouter();
   const { setCurrentDiagramId, setMermaid, diagrams, setDiagrams } =
     useHydratedStore();
@@ -44,13 +48,20 @@ export const NewDiagram = () => {
     createNewDiagram("create a diagram");
   };
   return (
-    <Button onClick={handleCreateNewDiagram} disabled={isCreatingNewDiagram}>
+    <Button
+      variant={variant === "default" ? "default" : "outline"}
+      onClick={handleCreateNewDiagram}
+      disabled={isCreatingNewDiagram}
+      className="w-full border-2 flex items-center justify-center"
+    >
       {isCreatingNewDiagram ? (
-        <Loader2 className="w-4 h-4 animate-spin mr-2" />
+        <Loader2 className="w-4 h-4 animate-spin" />
       ) : (
-        <Plus className="w-4 h-4 mr-2" />
+        <Plus className="w-4 h-4" />
       )}
-      New
+      {variant !== "icon" && (
+        <span className="text-sm tracking-wide">Diagram</span>
+      )}
     </Button>
   );
 };

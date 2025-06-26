@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+
 import { useStore } from "@/store";
 import { useGetUserInfo } from "@/features/auth/api/query";
 
@@ -11,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { UserProfileDropdownContent } from "./dropdown-content";
 
-export function UserProfile() {
+export function UserProfileFooter() {
   const { user, setUserResponse } = useStore();
 
   const { data: userInfo, refetch: refetchUserInfo } = useGetUserInfo(
@@ -36,16 +37,17 @@ export function UserProfile() {
     <section>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <div className="flex flex-col items-center relative">
-            <Avatar className="h-10 w-10 rounded-full border-2 border-gray-300 cursor-pointer">
+          <div className="flex items-center gap-2 text-left text-sm cursor-pointer">
+            <Avatar className="h-8 w-8 rounded-lg border-2 border-gray-300 ">
               <AvatarImage
                 src={user?.image || ""}
                 alt={user?.name || "avatar"}
               />
-              <AvatarFallback className="rounded-lg">LR</AvatarFallback>
+              <AvatarFallback className="rounded-lg">IA</AvatarFallback>
             </Avatar>
-            <div className="absolute -bottom-2 px-2 py-0.5 bg-black text-white text-[10px] font-bold rounded-full">
-              {user?.plan === "base" ? "BASE" : "PRO"}
+            <div className="grid flex-1 text-left text-sm leading-tight">
+              <span className="truncate font-semibold">{user?.name || ""}</span>
+              <span className="truncate text-xs">{user?.email || ""}</span>
             </div>
           </div>
         </DropdownMenuTrigger>
