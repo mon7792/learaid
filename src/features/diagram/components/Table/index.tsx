@@ -1,17 +1,27 @@
 "use client";
 
-import { Plus, FileText, Play } from "lucide-react";
+import { Plus, FileText, Play, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useMemo } from "react";
+
+import { useHydratedStore } from "@/store";
+
+import { useInfiniteListDiagrams } from "@/features/diagram/api/query";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { useHydratedStore } from "@/store";
-import { useListDiagrams } from "@/features/diagram/api/query";
 
 export const DiagramTable = () => {
   const { setCurrentDiagramId, setMermaid, diagrams } = useHydratedStore();
-  const { data: diagramData, isLoading, isError } = useListDiagrams();
+  const { 
+    data: diagramData, 
+    isLoading, 
+    isError, 
+    fetchNextPage, 
+    hasNextPage, 
+    isFetchingNextPage 
+  } = useInfiniteListDiagrams();
 
   const router = useRouter();
 
@@ -24,6 +34,13 @@ export const DiagramTable = () => {
     router.push(`/diagram/${id}`);
   };
 
+  const handleLoadMore = () => {
+    fetchNextPage();
+  };
+
+  // Flatten all pages into a single array of diagrams
+  const allDiagrams = useMemo(() => diagramData?.pages.flatMap(page => page.items) ?? [], [diagramData]);
+
   if (isLoading) {
     // TODO: add the table skeleton.
     return <div>Loading...</div>;
@@ -34,7 +51,7 @@ export const DiagramTable = () => {
     return <div>Error loading diagrams</div>;
   }
 
-  if (!diagramData || diagramData.items.length === 0) {
+  if (!diagramData || allDiagrams.length === 0) {
     return (
       <Card>
         <CardContent className="p-0">
@@ -58,6 +75,7 @@ export const DiagramTable = () => {
   }
 
   return (
+    <>
     <Card>
       <CardContent className="p-0">
         <div className="overflow-x-auto">
@@ -69,7 +87,7 @@ export const DiagramTable = () => {
               </tr>
             </thead>
             <tbody>
-              {diagramData.items.map((diagram) => {
+              {allDiagrams.map((diagram) => {
                 return (
                   <tr
                     key={diagram.id}
@@ -97,6 +115,7 @@ export const DiagramTable = () => {
                         </Button>
                       </div>
                     </td>
+                    <td></td>
                   </tr>
                 );
               })}
@@ -105,5 +124,26 @@ export const DiagramTable = () => {
         </div>
       </CardContent>
     </Card>
+    {hasNextPage && (
+      <div className="flex justify-end">
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={handleLoadMore}
+        disabled={isFetchingNextPage}
+        className="ml-auto"
+      >
+        {isFetchingNextPage ? (
+          <>
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+            Loading...
+          </>
+        ) : (
+          "Load More"
+        )}
+      </Button>
+      </div>
+    )}
+    </>
   );
 };
