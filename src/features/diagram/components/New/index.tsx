@@ -9,7 +9,7 @@ import { useHydratedStore } from "@/store";
 
 import { Button } from "@/components/ui/button";
 
-const NewDiagram = () => {
+export const NewDiagram = () => {
   const router = useRouter();
   const { setCurrentDiagramId, setMermaid, diagrams, setDiagrams } =
     useHydratedStore();
@@ -50,9 +50,7 @@ const NewDiagram = () => {
       ) : (
         <Plus className="w-4 h-4 mr-2" />
       )}
-      New Diagram
+      New
     </Button>
   );
 };
-
-export default NewDiagram;

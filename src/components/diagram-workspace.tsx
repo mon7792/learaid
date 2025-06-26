@@ -1,18 +1,18 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { Sparkles, Home, Loader2 } from "lucide-react";
+import { Sparkles, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 import { useHydratedStore } from "@/store";
 
 import { ThemeModeSwitcher } from "@/components/theme-toggle";
+import { UserProfile } from "@/features/auth/components/UserProfile";
 import { Chat } from "@/features/diagram/components/Chat";
-import { Button } from "@/components/ui/button";
+import { useListMessages } from "@/features/diagram/api/query";
 
 import "@excalidraw/excalidraw/index.css";
-import { useListMessages } from "@/features/diagram/api/query";
 
 // Dynamically import Excalidraw to avoid SSR issues
 const ExcalidrawWrapper = dynamic(
@@ -44,6 +44,11 @@ export default function DiagramWorkspace({ diagramId }: DiagramWorkspaceProps) {
   const { setCurrentDiagramId, setDiagrams, isHydrated, diagrams } =
     useHydratedStore();
 
+  const diagramTitle = useMemo(
+    () => diagrams.find((d) => d.id === diagramId)?.name ?? "",
+    [diagrams, diagramId]
+  );
+
   useEffect(() => {
     // Only initialize when the store is hydrated
     if (isHydrated) {
@@ -66,12 +71,20 @@ export default function DiagramWorkspace({ diagramId }: DiagramWorkspaceProps) {
         if (!diagramExists) {
           return [
             ...currentDiagrams,
-            { id: diagramId, name: diagramData.title, messages: diagramData.messages || [] },
+            {
+              id: diagramId,
+              name: diagramData.title,
+              messages: diagramData.messages || [],
+            },
           ];
         } else {
           return currentDiagrams.map((d) => {
             if (d.id === diagramId) {
-              return { ...d, name: diagramData.title, messages: diagramData.messages || [] };
+              return {
+                ...d,
+                name: diagramData.title,
+                messages: diagramData.messages || [],
+              };
             }
             return d;
           });
@@ -92,10 +105,14 @@ export default function DiagramWorkspace({ diagramId }: DiagramWorkspaceProps) {
     );
   }
 
-  return <DiagramSection />;
+  return <DiagramSection title={diagramTitle} />;
 }
 
-const DiagramSection = () => {
+type DiagramSectionProps = {
+  title: string;
+};
+
+const DiagramSection = ({ title }: DiagramSectionProps) => {
   return (
     <>
       <header className="flex items-center justify-between p-4 border-b bg-background/95 backdrop-blur">
@@ -109,16 +126,11 @@ const DiagramSection = () => {
             </div>
             <span className="font-semibold">Learaid</span>
           </Link>
-          <div className="text-sm text-muted-foreground">Diagram</div>
+          <div className="text-sm text-muted-foreground">Diagram: {title}</div>
         </div>
 
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" asChild>
-            <Link href="/">
-              <Home className="w-4 h-4" />
-              Home
-            </Link>
-          </Button>
+          <UserProfile />
           <ThemeModeSwitcher />
         </div>
       </header>

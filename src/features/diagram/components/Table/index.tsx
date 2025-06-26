@@ -10,13 +10,17 @@ import { useHydratedStore } from "@/store";
 import { useListDiagrams } from "@/features/diagram/api/query";
 
 export const DiagramTable = () => {
-  const { setCurrentDiagramId } = useHydratedStore();
-  const { data: diagrams, isLoading, isError } = useListDiagrams();
+  const { setCurrentDiagramId, setMermaid, diagrams } = useHydratedStore();
+  const { data: diagramData, isLoading, isError } = useListDiagrams();
 
   const router = useRouter();
 
   const handleOpenDiagram = (id: string) => () => {
     setCurrentDiagramId(id);
+    const mermaid = diagrams
+      .find((d) => d.id === id)
+      ?.messages.filter((m) => m.role === "ai")[0]?.mermaid ?? null;
+    setMermaid(mermaid);
     router.push(`/diagram/${id}`);
   };
 
@@ -30,7 +34,7 @@ export const DiagramTable = () => {
     return <div>Error loading diagrams</div>;
   }
 
-  if (!diagrams || diagrams.items.length === 0) {
+  if (!diagramData || diagramData.items.length === 0) {
     return (
       <Card>
         <CardContent className="p-0">
@@ -65,7 +69,7 @@ export const DiagramTable = () => {
               </tr>
             </thead>
             <tbody>
-              {diagrams.items.map((diagram) => {
+              {diagramData.items.map((diagram) => {
                 return (
                   <tr
                     key={diagram.id}
@@ -87,6 +91,7 @@ export const DiagramTable = () => {
                           variant="outline"
                           size="icon"
                           onClick={handleOpenDiagram(diagram.id)}
+                          className="cursor-pointer"
                         >
                           <Play className="w-4 h-4" />
                         </Button>

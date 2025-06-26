@@ -1,10 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+  apiVersion: "2025-05-28.basil",
+});
 
 export async function POST(request: NextRequest) {
-  if (request.method === "POST") {
+  try {
+    if (request.method !== "POST") {
+      return NextResponse.json(
+        { error: "Method Not Allowed" }, 
+        { status: 405 }
+      );
+    }
+
+    // Get the origin for dynamic URLs
+    const origin = request.headers.get("origin") || "http://localhost:3000";
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
@@ -13,19 +25,35 @@ export async function POST(request: NextRequest) {
             currency: "usd",
             product_data: {
               name: "Your Product Name",
+              description: "Premium subscription plan",
             },
-            unit_amount: 499,
+            unit_amount: 499, // $4.99
           },
           quantity: 1,
         },
       ],
       mode: "payment",
-      success_url: `http://localhost:3000/success`,
-      cancel_url: `http://localhost:3000/cancel`,
+      success_url: `${origin}/success`,
+      cancel_url: `${origin}/cancel`,
+      metadata: {
+        source: "web_checkout",
+      },
     });
 
     return NextResponse.json({ id: session.id });
-  } else {
-    return NextResponse.json({ error: "Method Not Allowed" }, { status: 405 });
+  } catch (error) {
+    console.error("Stripe checkout error:", error);
+    
+    if (error instanceof Stripe.errors.StripeError) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: 400 }
+      );
+    }
+    
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
