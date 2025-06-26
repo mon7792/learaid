@@ -22,7 +22,6 @@ export const createNewDiagram = async (
   }
 };
 
-
 export const addMessageToDiagram = async (
   id: string,
   diagramId: string,
@@ -30,7 +29,7 @@ export const addMessageToDiagram = async (
   role: "user" | "ai",
   mermaid: string | null,
   excalidraw: string | null,
-  tokenCost: number,
+  tokenCost: number
 ): Promise<void> => {
   const result = await db.insert(diagramMessages).values({
     id,
@@ -73,12 +72,7 @@ export const getDiagramWithMessages = async (
         title: diagram.title,
       })
       .from(diagram)
-      .where(
-        and(
-          eq(diagram.id, diagramId),
-          eq(diagram.userId, userId)
-        )
-      )
+      .where(and(eq(diagram.id, diagramId), eq(diagram.userId, userId)))
       .limit(1);
 
     if (diagramResult.length === 0) {
@@ -87,7 +81,7 @@ export const getDiagramWithMessages = async (
 
     // Build where conditions for messages
     const whereConditions = [eq(diagramMessages.diagramId, diagramId)];
-    
+
     // Apply cursor if provided
     if (cursor) {
       whereConditions.push(lt(diagramMessages.createdAt, new Date(cursor)));
@@ -115,7 +109,8 @@ export const getDiagramWithMessages = async (
       // Remove the extra item we fetched
       messagesResult.pop();
       // Set the next cursor to the last message's createdAt
-      nextCursor = messagesResult[messagesResult.length - 1]?.createdAt.toISOString();
+      nextCursor =
+        messagesResult[messagesResult.length - 1]?.createdAt.toISOString();
     }
 
     return {
@@ -126,3 +121,47 @@ export const getDiagramWithMessages = async (
   });
 };
 
+// getPaginatedDiagrams returns a paginated list of diagrams
+export const getPaginatedDiagrams = async (
+  userId: string,
+  cursor?: string,
+  limit: number = 10
+): Promise<{
+  diagrams: Array<{ id: string; title: string }>;
+  nextCursor?: string;
+}> => {
+  // Build where conditions
+  const whereConditions = [eq(diagram.userId, userId)];
+
+  // Apply cursor if provided
+  if (cursor) {
+    whereConditions.push(lt(diagram.createdAt, new Date(cursor)));
+  }
+
+  const result = await db
+    .select({
+      id: diagram.id,
+      title: diagram.title,
+      createdAt: diagram.createdAt,
+    })
+    .from(diagram)
+    .where(and(...whereConditions))
+    .orderBy(desc(diagram.createdAt))
+    .limit(limit + 1);
+
+  let nextCursor: string | undefined;
+  if (result.length > limit) {
+    result.pop();
+    nextCursor = result[result.length - 1]?.createdAt.toISOString();
+  }
+
+  return {
+    diagrams: result.map((diagram) => ({
+      id: diagram.id,
+
+      // TODO: UPDATE THE DRIZZLE SCHEMA TO HAVE A VALID DEFAULT VALUE FOR TITLE
+      title: diagram.title || "",
+    })) || [],
+    nextCursor,
+  };
+};

@@ -1,4 +1,5 @@
 import { ChatMessage, DiagramResponse } from "@/features/diagram/types";
+import { Paginated } from "@/types";
 
 export const generateDiagram = async (
   id: string,
@@ -40,6 +41,31 @@ export const createNewDiagram = async (
   }
   return data;
 };
+
+export const listDiagrams = async (
+  cursor?: string
+): Promise<Paginated<DiagramResponse>> => {
+  const queryParams = new URLSearchParams();
+  if (cursor) {
+    queryParams.set("cursor", cursor);
+  }
+
+  const response = await fetch(`/api/diagram?${queryParams.toString()}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "Failed to create new diagram");
+  }
+  return data;
+};
+
 
 export const listMessages = async (
   id: string,
