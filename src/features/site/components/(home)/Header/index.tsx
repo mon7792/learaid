@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Sparkles, PanelLeft } from "lucide-react";
+import { Sparkles, PanelLeft, PanelLeftOpen } from "lucide-react";
 
 import { useSession } from "@/lib/auth-client";
 
@@ -12,9 +12,10 @@ import { Button } from "@/components/ui/button";
 
 interface HeaderProps {
   onSidebarToggle?: () => void;
+  sidebarOpen?: boolean;
 }
 
-export const Header = ({ onSidebarToggle }: HeaderProps) => {
+export const Header = ({ onSidebarToggle, sidebarOpen }: HeaderProps) => {
   const { data: session } = useSession();
   
   return (
@@ -26,9 +27,14 @@ export const Header = ({ onSidebarToggle }: HeaderProps) => {
             variant="ghost"
             size="icon"
             onClick={onSidebarToggle}
-            className="mr-2"
+            className="mr-2 hidden md:flex"
+            title={sidebarOpen ? "Collapse Sidebar" : "Expand Sidebar"}
           >
-            <PanelLeft className="w-5 h-5" />
+            {sidebarOpen ? (
+              <PanelLeftOpen className="w-5 h-5" />
+            ) : (
+              <PanelLeft className="w-5 h-5" />
+            )}
           </Button>
         )}
         

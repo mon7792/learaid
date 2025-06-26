@@ -18,7 +18,7 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 flex flex-col">
       <Sidebar isOpen={sidebarOpen} onToggle={toggleSidebar} />
       
-      <div className={`flex-1 transition-all duration-300 ${sidebarOpen ? 'md:ml-64' : ''}`}>
+      <div className={`flex-1 transition-all duration-300 ${sidebarOpen ? 'md:ml-64' : 'md:ml-16'}`}>
         <Header onSidebarToggle={toggleSidebar} />
         <Content />
         <Footer />
