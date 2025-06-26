@@ -9,6 +9,7 @@ import {
   addUserMessage,
 } from "@/features/diagram/usecase/add-diagram-message";
 import { getUser, isAuthenticated } from "@/utils/auth";
+import { validateMermaidSyntax } from "@/utils/mermaid";
 import { ChatMessage } from "@/features/diagram/types";
 
 const SYSTEM_PROMPT = `You are an expert diagram generator. Convert user requests into valid Mermaid diagram syntax.
@@ -93,7 +94,19 @@ export async function POST(
     });
 
     // add ai message
-    const aiMessageId = await addAiMessage(id, object.mermaid, object.message, null, 0);
+    const aiMessageId = await addAiMessage(
+      id,
+      object.message,
+      object.mermaid,
+      null,
+      0
+    );
+
+    // TODO: how to ensure mermaid code is valid?
+    const validation = await validateMermaidSyntax(object.mermaid.trim());
+    if (!validation.valid) {
+      console.error("Invalid Mermaid code:", validation.error);
+    }
 
     return NextResponse.json({
       id: aiMessageId,

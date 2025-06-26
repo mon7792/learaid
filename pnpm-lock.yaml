@@ -72,7 +72,7 @@ importers:
         specifier: ^0.522.0
         version: 0.522.0(react@19.1.0)
       mermaid:
-        specifier: ^11.4.0
+        specifier: ^11.7.0
         version: 11.7.0
       nanoid:
         specifier: ^5.0.8
