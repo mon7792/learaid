@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { Sparkles, ArrowLeft, Plus, User, Coins } from "lucide-react";
+import { Sparkles, ArrowLeft, User, Coins } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,7 @@ import { useSession } from "@/lib/auth-client";
 import { useGetUserInfo } from "@/features/auth/api/query";
 
 import { DiagramTable } from "@/features/diagram/components/Table";
+import NewDiagram from "@/features/diagram/components/New";
 
 export default function DashboardPage() {
   const { data: session } = useSession();
@@ -124,12 +125,7 @@ export default function DashboardPage() {
                   Manage and view all your created diagrams
                 </p>
               </div>
-              <Button asChild>
-                <Link href="/">
-                  <Plus className="w-4 h-4 mr-2" />
-                  New Diagram
-                </Link>
-              </Button>
+              <NewDiagram />
             </div>
 
             {/* Diagrams Table */}

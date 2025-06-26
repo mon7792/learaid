@@ -1,7 +1,6 @@
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/lib/auth";
+import { getUser } from "@/utils/auth";
 
 
 export default async function AppLayout({
@@ -9,9 +8,7 @@ export default async function AppLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await getUser();
 
   if (!session) {
     console.log("No session found, redirecting to login");
