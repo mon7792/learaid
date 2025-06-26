@@ -2,6 +2,7 @@ import { z } from "zod";
 import { openai } from "@ai-sdk/openai";
 import { generateObject } from "ai";
 import { NextRequest, NextResponse } from "next/server";
+import { isValid } from "ulidx";
 
 import { chatSchema } from "@/features/diagram/schema";
 import {
@@ -55,6 +56,9 @@ export async function POST(
 ) {
   try {
     const { id } = await params;
+    if (!isValid(id)) {
+      return NextResponse.json({ error: "Invalid Diagram id" }, { status: 404 });
+    }
 
     const isAuth = await isAuthenticated(request);
     if (!isAuth) {

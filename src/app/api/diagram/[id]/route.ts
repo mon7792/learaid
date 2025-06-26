@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isValid } from "ulidx";
 
 import { getUser, isAuthenticated } from "@/utils/auth";
+
 import { listMessages } from "@/features/diagram/usecase/list-messages";
 
 export async function GET(
@@ -11,6 +13,10 @@ export async function GET(
     const { id } = await params;
     const searchParams = request.nextUrl.searchParams;
     const cursor = searchParams.get("cursor") || "";
+
+    if (!isValid(id)) {
+      return NextResponse.json({ error: "Invalid Diagram id" }, { status: 404 });
+    }
 
     const isAuth = await isAuthenticated(request);
     if (!isAuth) {
