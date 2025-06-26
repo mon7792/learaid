@@ -149,9 +149,11 @@ export const ChatContent = () => {
 
   // Memoized messages list to prevent unnecessary re-renders
   const messagesList = useMemo(() => {
-    return messages?.map((message: ChatMessage) => (
-      <MessageItem key={message.id} message={message} />
-    ));
+    return messages
+      .reverse()
+      .map((message: ChatMessage) => (
+        <MessageItem key={message.id} message={message} />
+      ));
   }, [messages]);
 
   if (!messages || messages.length === 0) {
