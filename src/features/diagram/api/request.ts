@@ -16,6 +16,7 @@ export const generateDiagram = async (
 
   const data = await response.json();
 
+  // TODO: update this to handle in sufficient tokens
   if (!response.ok) {
     throw new Error(data.error || "Failed to generate diagram");
   }

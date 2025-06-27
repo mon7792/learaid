@@ -14,20 +14,14 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { useHydratedStore } from "@/store";
 
-interface InsufficientTokensDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  currentTokens?: number;
-}
 
-export function InsufficientTokensDialog({
-  open,
-  onOpenChange,
-  currentTokens = 0,
-}: InsufficientTokensDialogProps) {
+export const BuyTokenDialog = () => {
+  const { buyDialogOpen, setBuyDialogOpen, user } = useHydratedStore();
+
   return (
-    <AlertDialog open={open} onOpenChange={onOpenChange}>
+    <AlertDialog open={buyDialogOpen} onOpenChange={setBuyDialogOpen}>
       <AlertDialogContent className="sm:max-w-md">
         <AlertDialogHeader>
           <div className="flex items-center gap-3 mb-2">
@@ -41,7 +35,7 @@ export function InsufficientTokensDialog({
               <div className="flex items-center gap-2 mt-1">
                 <Coins className="w-4 h-4 text-muted-foreground" />
                 <span className="text-sm text-muted-foreground">
-                  Current balance: {currentTokens.toLocaleString()} tokens
+                  Current balance: {user?.token.toLocaleString()} tokens
                 </span>
               </div>
             </div>

@@ -9,7 +9,7 @@ import {
 import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
 import { parseMermaidToExcalidraw } from "@excalidraw/mermaid-to-excalidraw";
 
-import { useStore } from "@/store";
+import { useHydratedStore } from "@/store";
 
 import "@excalidraw/excalidraw/index.css";
 
@@ -21,7 +21,7 @@ A[Start] --> B[Stop]
 
 export default function ExcalidrawWrapper() {
   const { resolvedTheme } = useTheme();
-  const { mermaid } = useStore();
+  const { mermaid } = useHydratedStore();
   const [isConverting, setIsConverting] = useState(true);
   const [excalidrawAPI, setExcalidrawAPI] = useState<ExcalidrawImperativeAPI | null>(null);
 

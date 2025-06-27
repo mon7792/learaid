@@ -2,7 +2,6 @@
 
 import { ArrowRight, Lightbulb } from "lucide-react";
 import { useChatInput } from "@/features/site/hooks/use-chat-input";
-import { useHydratedStore } from "@/store";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +11,7 @@ import {
   FormItem,
   FormField,
 } from "@/components/ui/form";
-import { InsufficientTokensDialog } from "@/components/insufficient-tokens-dialog";
+import { BuyTokenDialog } from "@/components/buy-tokens-dialog";
 
 export const ChatTextarea = () => {
   const { 
@@ -20,11 +19,7 @@ export const ChatTextarea = () => {
     handleSubmit, 
     isPending, 
     samplePrompts,
-    showInsufficientTokensDialog,
-    setShowInsufficientTokensDialog
   } = useChatInput();
-  
-  const { user } = useHydratedStore();
   
   const submitForm = async () => {
     const isValid = await form.trigger();
@@ -116,11 +111,7 @@ export const ChatTextarea = () => {
         </div>
 
     {/* Insufficient Tokens Dialog */}
-    <InsufficientTokensDialog
-      open={showInsufficientTokensDialog}
-      onOpenChange={setShowInsufficientTokensDialog}
-      currentTokens={user?.token || 0}
-    />
+    <BuyTokenDialog />
     </>
   );
 };

@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-import { useStore } from "@/store";
+import { useHydratedStore } from "@/store";
 import { useGetUserInfo } from "@/features/auth/api/query";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -13,7 +13,7 @@ import {
 import { UserProfileDropdownContent } from "./dropdown-content";
 
 export function UserProfileFooter() {
-  const { user, setUserResponse } = useStore();
+  const { user, setUserResponse } = useHydratedStore();
 
   const { data: userInfo, refetch: refetchUserInfo } = useGetUserInfo(
     user === null

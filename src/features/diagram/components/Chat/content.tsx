@@ -3,7 +3,7 @@
 import { useEffect, useRef, useMemo, useCallback, memo } from "react";
 import { Sparkles, User, Bot, Play } from "lucide-react";
 
-import { useStore } from "@/store";
+import { useHydratedStore } from "@/store";
 import { ChatMessage } from "@/features/diagram/types";
 import { Button } from "@/components/ui/button";
 
@@ -64,7 +64,7 @@ MermaidCodeBlock.displayName = "MermaidCodeBlock";
 
 // Memoized individual message component
 const MessageItem = memo<{ message: ChatMessage }>(({ message }) => {
-  const { setMermaid } = useStore();
+  const { setMermaid } = useHydratedStore();
   const isUser = message.role === "user";
 
   const formatTime = useCallback((date: Date | string) => {
@@ -131,7 +131,7 @@ MessageItem.displayName = "MessageItem";
 
 export const ChatContent = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { id, diagrams } = useStore();
+  const { id, diagrams } = useHydratedStore();
   
   const messages = useMemo(() => {
     if (!id) return [];

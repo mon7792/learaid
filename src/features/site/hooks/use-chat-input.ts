@@ -13,6 +13,9 @@ import {
 } from "@/features/diagram/api/mutation";
 import { chatSchema } from "@/features/diagram/schema";
 import { useSession } from "@/lib/auth-client";
+import { useHydratedStore } from "@/store";
+import { useGetTokens } from "@/features/billing/api/query";
+import { useEstimateTokenCost } from "@/features/billing/api/mutation";
 
 type UseChatInputReturnProps = {
   isPending: boolean;
@@ -20,13 +23,12 @@ type UseChatInputReturnProps = {
   form: UseFormReturn<z.infer<typeof chatSchema>>;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   samplePrompts: string[];
-  showInsufficientTokensDialog: boolean;
-  setShowInsufficientTokensDialog: (show: boolean) => void;
 };
 
 export const useChatInput = (): UseChatInputReturnProps => {
+  const { user, setBuyDialogOpen } = useHydratedStore();
+  const { getTokenTotal, getTokenEstimate } = useTokensCost();
   const [diagramId, setDiagramId] = useState<string | null>(null);
-  const [showInsufficientTokensDialog, setShowInsufficientTokensDialog] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
   const form = useForm<z.infer<typeof chatSchema>>({
@@ -45,8 +47,11 @@ export const useChatInput = (): UseChatInputReturnProps => {
       (error) => {
         console.error("error", error);
         // Check if the error is about insufficient tokens
-        if (error.message.includes("Insufficient tokens") || error.message.includes("402")) {
-          setShowInsufficientTokensDialog(true);
+        if (
+          error.message.includes("Insufficient tokens") ||
+          error.message.includes("402")
+        ) {
+          setBuyDialogOpen(true);
         } else {
           toast.error("Failed to generate diagram. Please try again.");
         }
@@ -63,24 +68,63 @@ export const useChatInput = (): UseChatInputReturnProps => {
       (error) => {
         console.error("error", error);
         // Check if the error is about insufficient tokens
-        if (error.message.includes("Insufficient tokens") || error.message.includes("402")) {
-          setShowInsufficientTokensDialog(true);
+        if (
+          error.message.includes("Insufficient tokens") ||
+          error.message.includes("402")
+        ) {
+          setBuyDialogOpen(true);
         } else {
           toast.error("Failed to create diagram. Please try again.");
         }
       }
     );
 
-  const onSubmit = (values: z.infer<typeof chatSchema>) => {
+  const checkSufficientTokens = async (message: string): Promise<boolean> => {
+    // check if the user token is less than 0
+    if (user?.token && user.token < 0) {
+      return false;
+    }
+
+    // Estimate token cost for the message
+    let tokenTotal = 0;
+    let tokenEstimate = 0;
+    try {
+      const tokens = await getTokenTotal();
+      tokenTotal = tokens?.data?.tokens || 0;
+    } catch (error) {
+      console.error("Failed to get token total:", error);
+      toast.error("Failed to get token total. Please try again.");
+      return false;
+    }
+
+    try {
+      const estimatedTokens = await getTokenEstimate(message);
+      tokenEstimate = estimatedTokens.tokens || 0;
+    } catch (error) {
+      console.error("Failed to get token estimate:", error);
+      toast.error("Failed to get token estimate. Please try again.");
+      return false;
+    }
+
+    // Check if the user has sufficient tokens
+    if (tokenTotal - tokenEstimate < 0) {
+      return false;
+    }
+
+    return true;
+  };
+
+  const onSubmit = async (values: z.infer<typeof chatSchema>) => {
     if (!session) {
       router.push(`/auth/login?prompt=${encodeURIComponent(values.message)}`);
       return;
     }
 
-    // TODO: add the token check here.: remove this after testing
-    setShowInsufficientTokensDialog(true);
-
-    return;
+    const isSufficientTokens = await checkSufficientTokens(values.message);
+    if (!isSufficientTokens) {
+      setBuyDialogOpen(true);
+      return;
+    }
 
     // create a new diagram
     createNewDiagram(values.message);
@@ -93,8 +137,6 @@ export const useChatInput = (): UseChatInputReturnProps => {
     isPending: isGeneratingDiagram || isCreatingNewDiagram,
     handleSubmit,
     isFormValid: form.formState.isValid,
-    showInsufficientTokensDialog,
-    setShowInsufficientTokensDialog,
     samplePrompts: [
       "Create a flowchart for a user registration process",
       "Design a system architecture diagram for an e-commerce platform",
@@ -103,5 +145,15 @@ export const useChatInput = (): UseChatInputReturnProps => {
       "Create a decision tree for choosing a programming language",
       "Design a database schema for a blog application",
     ],
+  };
+};
+
+const useTokensCost = () => {
+  const { refetch: getTokenTotal } = useGetTokens();
+  const { mutateAsync: getTokenEstimate } = useEstimateTokenCost();
+
+  return {
+    getTokenTotal,
+    getTokenEstimate,
   };
 };

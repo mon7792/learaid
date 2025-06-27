@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { User, Coins } from "lucide-react";
 
-import { useStore } from "@/store";
+import { useHydratedStore } from "@/store";
 import { useGetUserInfo } from "@/features/auth/api/query";
 
 import {
@@ -17,7 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { Checkout } from "@/features/billing/components/Checkout";
 
 export function UserProfileCard() {
-  const { user, setUserResponse } = useStore();
+  const { user, setUserResponse } = useHydratedStore();
 
   const { data: userInfo, refetch: refetchUserInfo } = useGetUserInfo(
     user === null

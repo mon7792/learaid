@@ -5,3 +5,8 @@ export interface UserResponse
   token: number;
   plan: string;
 }
+
+
+export interface UserTokenResponse{
+  tokens: number; // total token present in the account
+}

@@ -2,6 +2,7 @@
 
 import { ChatInput } from "@/features/diagram/components/Chat/input";
 import { ChatContent } from "@/features/diagram/components/Chat/content";
+import { BuyTokenDialog } from "@/components/buy-tokens-dialog";
 
 export const Chat = () => {
   return (
@@ -18,6 +19,7 @@ export const Chat = () => {
       <div className="border-t p-4 flex-shrink-0">
         <ChatInput />
       </div>
+      <BuyTokenDialog />
     </>
   );
 };
