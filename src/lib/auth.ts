@@ -52,4 +52,9 @@ export const auth = betterAuth({
       maxAge: 5 * 60, // 5 minutes
     },
   },
+  rateLimit: {
+    enabled: true,
+    window: 10,
+    max: 100
+  },
 });
