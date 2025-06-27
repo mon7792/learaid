@@ -2,6 +2,7 @@
 
 import { ArrowRight, Lightbulb } from "lucide-react";
 import { useChatInput } from "@/features/site/hooks/use-chat-input";
+import { useHydratedStore } from "@/store";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -11,11 +12,19 @@ import {
   FormItem,
   FormField,
 } from "@/components/ui/form";
-
-
+import { InsufficientTokensDialog } from "@/components/insufficient-tokens-dialog";
 
 export const ChatTextarea = () => {
-  const { form, handleSubmit, isPending, samplePrompts } = useChatInput();
+  const { 
+    form, 
+    handleSubmit, 
+    isPending, 
+    samplePrompts,
+    showInsufficientTokensDialog,
+    setShowInsufficientTokensDialog
+  } = useChatInput();
+  
+  const { user } = useHydratedStore();
   
   const submitForm = async () => {
     const isValid = await form.trigger();
@@ -82,6 +91,7 @@ export const ChatTextarea = () => {
         </div>
       </form>
     </Form>
+    
     <div className="space-y-4">
           <h2 className="text-lg font-semibold text-muted-foreground">
             Try these examples:
@@ -104,6 +114,13 @@ export const ChatTextarea = () => {
             ))}
           </div>
         </div>
+
+    {/* Insufficient Tokens Dialog */}
+    <InsufficientTokensDialog
+      open={showInsufficientTokensDialog}
+      onOpenChange={setShowInsufficientTokensDialog}
+      currentTokens={user?.token || 0}
+    />
     </>
   );
 };

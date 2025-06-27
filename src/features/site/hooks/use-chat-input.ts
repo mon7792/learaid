@@ -20,10 +20,13 @@ type UseChatInputReturnProps = {
   form: UseFormReturn<z.infer<typeof chatSchema>>;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   samplePrompts: string[];
+  showInsufficientTokensDialog: boolean;
+  setShowInsufficientTokensDialog: (show: boolean) => void;
 };
 
 export const useChatInput = (): UseChatInputReturnProps => {
   const [diagramId, setDiagramId] = useState<string | null>(null);
+  const [showInsufficientTokensDialog, setShowInsufficientTokensDialog] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
   const form = useForm<z.infer<typeof chatSchema>>({
@@ -41,6 +44,13 @@ export const useChatInput = (): UseChatInputReturnProps => {
       },
       (error) => {
         console.error("error", error);
+        
+        // Check if the error is about insufficient tokens
+        if (error.message.includes("Insufficient tokens") || error.message.includes("402")) {
+          setShowInsufficientTokensDialog(true);
+        } else {
+          toast.error("Failed to generate diagram. Please try again.");
+        }
       }
     );
 
@@ -53,6 +63,13 @@ export const useChatInput = (): UseChatInputReturnProps => {
       },
       (error) => {
         console.error("error", error);
+        
+        // Check if the error is about insufficient tokens
+        if (error.message.includes("Insufficient tokens") || error.message.includes("402")) {
+          setShowInsufficientTokensDialog(true);
+        } else {
+          toast.error("Failed to create diagram. Please try again.");
+        }
       }
     );
 
@@ -73,6 +90,8 @@ export const useChatInput = (): UseChatInputReturnProps => {
     isPending: isGeneratingDiagram || isCreatingNewDiagram,
     handleSubmit,
     isFormValid: form.formState.isValid,
+    showInsufficientTokensDialog,
+    setShowInsufficientTokensDialog,
     samplePrompts: [
       "Create a flowchart for a user registration process",
       "Design a system architecture diagram for an e-commerce platform",
