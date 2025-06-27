@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertTriangle, Coins } from "lucide-react";
+import { AlertTriangle, BadgeEuro, Coins } from "lucide-react";
 import Link from "next/link";
 
 import {
@@ -13,6 +13,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 
 interface InsufficientTokensDialogProps {
   open: boolean;
@@ -46,33 +47,18 @@ export function InsufficientTokensDialog({
             </div>
           </div>
           <AlertDialogDescription className="text-left">
-            You don't have enough tokens to generate a diagram. Please refill
+            You don&apos;t have enough tokens to generate a diagram. Please refill
             your token balance to continue creating amazing diagrams with AI.
           </AlertDialogDescription>
         </AlertDialogHeader>
-
-        <div className="bg-muted/50 rounded-lg p-4 my-4">
-          <div className="space-y-2 text-sm">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-primary rounded-full"></div>
-              <span>Generate unlimited diagrams</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-primary rounded-full"></div>
-              <span>No daily limits</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-primary rounded-full"></div>
-              <span>Priority AI processing</span>
-            </div>
-          </div>
-        </div>
-
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel className="cursor-pointer border-border">Cancel</AlertDialogCancel>
           <AlertDialogAction asChild>
-            <Link href="/buy" className="bg-primary hover:bg-primary/90">
-              Buy Tokens
+            <Link href="/buy">
+              <Button className="cursor-pointer">
+                <BadgeEuro className="w-6 h-6" />
+                <span className="text-sm font-semibold tracking-wide">BUY</span>
+              </Button>
             </Link>
           </AlertDialogAction>
         </AlertDialogFooter>

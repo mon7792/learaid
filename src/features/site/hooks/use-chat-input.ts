@@ -44,7 +44,6 @@ export const useChatInput = (): UseChatInputReturnProps => {
       },
       (error) => {
         console.error("error", error);
-        
         // Check if the error is about insufficient tokens
         if (error.message.includes("Insufficient tokens") || error.message.includes("402")) {
           setShowInsufficientTokensDialog(true);
@@ -63,7 +62,6 @@ export const useChatInput = (): UseChatInputReturnProps => {
       },
       (error) => {
         console.error("error", error);
-        
         // Check if the error is about insufficient tokens
         if (error.message.includes("Insufficient tokens") || error.message.includes("402")) {
           setShowInsufficientTokensDialog(true);
@@ -78,6 +76,11 @@ export const useChatInput = (): UseChatInputReturnProps => {
       router.push(`/auth/login?prompt=${encodeURIComponent(values.message)}`);
       return;
     }
+
+    // TODO: add the token check here.: remove this after testing
+    setShowInsufficientTokensDialog(true);
+
+    return;
 
     // create a new diagram
     createNewDiagram(values.message);
