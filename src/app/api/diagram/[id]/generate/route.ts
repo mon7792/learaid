@@ -6,8 +6,7 @@ import { isValid } from "ulidx";
 
 import { chatSchema } from "@/features/diagram/schema";
 import {
-  addAiMessage,
-  addUserMessage,
+  addMessagesToDiagram,
 } from "@/features/diagram/usecase/add-diagram-message";
 import { getUser, isAuthenticated } from "@/utils/auth";
 import { validateMermaidSyntax } from "@/utils/mermaid";
@@ -82,10 +81,10 @@ export async function POST(
     // TODO: validation of diagram id
 
     // add user message
-    await addUserMessage(id, message);
+
 
     // generate mermaid code
-    const { object } = await generateObject({
+    const { object, finishReason, usage } = await generateObject({
       model: openai("gpt-4-turbo"),
       system: SYSTEM_PROMPT,
       prompt: `Generate a Mermaid diagram for: ${message}`,
@@ -97,14 +96,17 @@ export async function POST(
       }),
     });
 
+    console.log("finishReason", finishReason);
+    console.log("usage", usage);
+
     // add ai message
-    const aiMessageId = await addAiMessage(
-      id,
-      object.message,
-      object.mermaid,
-      null,
-      0
-    );
+
+    // add ai message to diagram
+    const aiMessageId = await addMessagesToDiagram(user.id, id, usage.totalTokens, message, {
+      message: object.message,
+      mermaid: object.mermaid,
+      excalidraw: null,
+    });
 
     // TODO: how to ensure mermaid code is valid?
     const validation = await validateMermaidSyntax(object.mermaid.trim());

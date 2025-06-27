@@ -1,10 +1,14 @@
+import { eq, and, desc, lt, sql } from "drizzle-orm";
+
 import { db } from "@/config/db";
 import { diagram, diagramMessages } from "@/schema/diagram";
-import { eq, and, desc, lt } from "drizzle-orm";
+import { Transaction } from "@/types/db";
+import { updateUserBillingTokenTx } from "@/features/auth/model";
 
 const errDiagramCreation = Error("err: db: failed to create new diagram entry");
 const errMessageCreation = Error("err: db: failed to create new message entry");
 const errDiagramNotFound = Error("err: db: diagram not found");
+const errDiagramUpdate = Error("err: db: failed to update diagram tokens");
 
 export const createNewDiagram = async (
   id: string,
@@ -19,30 +23,6 @@ export const createNewDiagram = async (
 
   if (!result.rowCount || result.rowCount !== 1) {
     throw errDiagramCreation;
-  }
-};
-
-export const addMessageToDiagram = async (
-  id: string,
-  diagramId: string,
-  message: string,
-  role: "user" | "ai",
-  mermaid: string | null,
-  excalidraw: string | null,
-  tokenCost: number
-): Promise<void> => {
-  const result = await db.insert(diagramMessages).values({
-    id,
-    diagramId,
-    message,
-    role,
-    mermaid,
-    excalidraw,
-    tokenCost,
-  });
-
-  if (!result.rowCount || result.rowCount !== 1) {
-    throw errMessageCreation;
   }
 };
 
@@ -156,12 +136,77 @@ export const getPaginatedDiagrams = async (
   }
 
   return {
-    diagrams: result.map((diagram) => ({
-      id: diagram.id,
+    diagrams:
+      result.map((diagram) => ({
+        id: diagram.id,
 
-      // TODO: UPDATE THE DRIZZLE SCHEMA TO HAVE A VALID DEFAULT VALUE FOR TITLE
-      title: diagram.title || "",
-    })) || [],
+        // TODO: UPDATE THE DRIZZLE SCHEMA TO HAVE A VALID DEFAULT VALUE FOR TITLE
+        title: diagram.title || "",
+      })) || [],
     nextCursor,
   };
+};
+
+// addMessagesToDiagram adds multiple messages to a diagram
+export const addMessagesToDiagramDB = async (
+  userId: string,
+  diagramId: string,
+  tokenCost: number,
+  messages: Array<typeof diagramMessages.$inferInsert>
+): Promise<void> => {
+  await db.transaction(async (tx) => {
+    try {
+      await addMessagesToDiagramTx(tx, messages);
+      await updateDiagramTokenTx(tx, diagramId, tokenCost);
+      await updateUserBillingTokenTx(tx, userId, tokenCost);
+    } catch (error: unknown) {
+      // better 
+      console.error(error);
+      tx.rollback();
+    }
+  });
+};
+
+
+export const addMessagesToDiagramTx = async (
+  tx: Transaction,
+  messages: Array<typeof diagramMessages.$inferInsert>
+): Promise<void> => {
+  const result = await tx.insert(diagramMessages).values(messages);
+  if (!result.rowCount || result.rowCount !== messages.length) {
+    throw errMessageCreation;
+  }
+};
+
+export const updateDiagramTokenTx = async (
+  tx: Transaction,
+  diagramId: string,
+  tokenCost: number
+): Promise<void> => {
+  // First, lock the row with SELECT FOR UPDATE to prevent race conditions
+  const lockedDiagram = await tx
+    .select({
+      id: diagram.id,
+      tokensUsed: diagram.tokensUsed,
+    })
+    .from(diagram)
+    .where(eq(diagram.id, diagramId))
+    .for("update")
+    .limit(1);
+
+  if (lockedDiagram.length === 0) {
+    throw errDiagramNotFound;
+  }
+
+  // Update the tokens with the new value
+  const result = await tx
+    .update(diagram)
+    .set({
+      tokensUsed: sql`${diagram.tokensUsed} + ${tokenCost}`,
+    })
+    .where(eq(diagram.id, diagramId));
+
+  if (!result.rowCount || result.rowCount !== 1) {
+    throw errDiagramUpdate;
+  }
 };
