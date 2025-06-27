@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Learaid",
+  title: "Vanita",
   description: "Your AI-powered learning assistant for complex subjects.",
 };
 

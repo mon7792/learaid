@@ -22,7 +22,7 @@ export const useStore = create<
         ...createSidebarSlice(...a),
       }),
       {
-        name: "learaid-storage",
+        name: "Vanita-storage",
         onRehydrateStorage: () => (state) => {
           if (state) {
             state.setHydrated(true);
@@ -31,7 +31,7 @@ export const useStore = create<
       }
     ),
     {
-      name: "learaid-store",
+      name: "Vanita-store",
     }
   )
 );

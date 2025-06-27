@@ -26,7 +26,7 @@ export default function SignupPage() {
               <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center shadow-lg">
                 <Sparkles className="w-7 h-7 text-primary-foreground" />
               </div>
-              <span className="text-3xl font-bold">Learaid</span>
+              <span className="text-3xl font-bold">Vanita</span>
             </div>
 
             {/* Hero Text */}
@@ -81,7 +81,7 @@ export default function SignupPage() {
               <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
                 <Sparkles className="w-6 h-6 text-primary-foreground" />
               </div>
-              <span className="text-2xl font-bold">Learaid</span>
+              <span className="text-2xl font-bold">Vanita</span>
             </Link>
           </div>
 
@@ -96,7 +96,7 @@ export default function SignupPage() {
           {/* Signup Card */}
           <Card className="border-0 shadow-xl bg-card/50 backdrop-blur-sm">
             <CardHeader className="text-center pb-2">
-              <CardTitle className="text-xl">Join Learaid today</CardTitle>
+              <CardTitle className="text-xl">Join Vanita today</CardTitle>
               <CardDescription>
                 Start your journey to effortless diagram creation
               </CardDescription>

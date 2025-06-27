@@ -124,7 +124,7 @@ const DiagramSection = ({ title }: DiagramSectionProps) => {
             <div className="w-6 h-6 bg-primary rounded-md flex items-center justify-center">
               <Sparkles className="w-4 h-4 text-primary-foreground" />
             </div>
-            <span className="font-semibold">Learaid</span>
+            <span className="font-semibold">Vanita</span>
           </Link>
           <div className="text-sm text-muted-foreground">Diagram: {title}</div>
         </div>

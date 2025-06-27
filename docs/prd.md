@@ -1,6 +1,6 @@
 # Product Requirements Document (PRD)
 
-## Product Name: Learaid
+## Product Name: Vanita
 
 **Version:** 1.0
 
@@ -10,9 +10,9 @@
 
 ## Overview
 
-Learaid is a diagram-generation GPT application designed to convert user prompts into flowcharts and visual diagrams. 
+Vanita is a diagram-generation GPT application designed to convert user prompts into flowcharts and visual diagrams. 
 The app provides a seamless, intuitive experience for users who need quick and visually appealing diagrams based on their textual input. 
-Learaid leverages modern web technologies and AI tools to deliver its core functionality.
+Vanita leverages modern web technologies and AI tools to deliver its core functionality.
 
 ---
 

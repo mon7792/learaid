@@ -40,7 +40,7 @@ export default function SuccessPage() {
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
             <Sparkles className="w-5 h-5 text-primary-foreground" />
           </div>
-          <span className="text-xl font-bold">Learaid</span>
+          <span className="text-xl font-bold">Vanita</span>
         </Link>
       </header>
 
@@ -56,7 +56,7 @@ export default function SuccessPage() {
           <div className="space-y-4">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
               Welcome to
-              <span className="text-primary block">Learaid!</span>
+              <span className="text-primary block">Vanita!</span>
             </h1>
             <p className="text-xl text-muted-foreground leading-relaxed">
               Your subscription has been successfully activated. You can now start creating amazing diagrams with AI.

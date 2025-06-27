@@ -4,7 +4,7 @@ export const Footer = () => {
   return (
     <footer className="w-full p-6 mt-16">
       <div className="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-        <div>© 2025 Learaid</div>
+        <div>© 2025 Vanita</div>
         <Link
           href="https://www.linkedin.com/in/monishkadam "
           target="_blank"
