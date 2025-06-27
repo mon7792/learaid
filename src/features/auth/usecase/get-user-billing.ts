@@ -1,3 +1,4 @@
+// TODO: shift this to billing feature
 import { getUserBilling as getUserBillingModel } from "@/features/auth/model";
 
 export const getUserBilling = async (userId: string): Promise<{

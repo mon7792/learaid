@@ -11,6 +11,7 @@ import {
 import { getUser, isAuthenticated } from "@/utils/auth";
 import { validateMermaidSyntax } from "@/utils/mermaid";
 import { ChatMessage } from "@/features/diagram/types";
+import { hasUserToken } from "@/features/billing/usecase/has-user-token";
 
 const SYSTEM_PROMPT = `You are an expert diagram generator. Convert user requests into valid Mermaid diagram syntax.
 
@@ -59,6 +60,15 @@ export async function POST(
       return NextResponse.json({ error: "Invalid Diagram id" }, { status: 404 });
     }
 
+    const { message } = await request.json();
+    const parsed = chatSchema.safeParse({ message: message });
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.message },
+        { status: 400 }
+      );
+    }
+
     const isAuth = await isAuthenticated(request);
     if (!isAuth) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -69,19 +79,13 @@ export async function POST(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { message } = await request.json();
-    const parsed = chatSchema.safeParse({ message: message });
-    if (!parsed.success) {
-      return NextResponse.json(
-        { error: parsed.error.message },
-        { status: 400 }
-      );
-    }
-
     // TODO: validation of diagram id
 
-    // add user message
-
+    // check if user has tokens
+    const hasToken = await hasUserToken(user.id);
+    if (!hasToken) {
+      return NextResponse.json({ error: "Insufficient tokens" }, { status: 402 });
+    }
 
     // generate mermaid code
     const { object, finishReason, usage } = await generateObject({
