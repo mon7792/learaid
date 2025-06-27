@@ -101,6 +101,7 @@ export const useChatInput = () => {
     const isSufficientTokens = await checkSufficientTokens(values.message);
     if (!isSufficientTokens) {
       setBuyDialogOpen(true);
+      form.setFocus("message");
       return;
     }
 

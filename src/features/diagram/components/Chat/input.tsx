@@ -1,6 +1,6 @@
 "use client";
 
-import { Send, Loader2 } from "lucide-react";
+import { Send, Loader2, BotMessageSquare, LoaderPinwheel } from "lucide-react";
 
 import { useChatInput } from "@/features/diagram/hooks/use-chat-input";
 
@@ -13,11 +13,25 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 export const ChatInput = () => {
   const { form, isPending, handleSubmit, isFormValid } = useChatInput();
 
+  const submitForm = async () => {
+    const isValid = await form.trigger();
+    if (isValid) {
+      handleSubmit({
+        preventDefault: () => {},
+      } as React.FormEvent<HTMLFormElement>);
+    }
+  };
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      submitForm();
+    }
+  };
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit} className="space-y-3">
@@ -27,12 +41,20 @@ export const ChatInput = () => {
             name="message"
             render={({ field }) => (
               <FormItem className="space-y-0">
-                <FormLabel>Message</FormLabel>
+                <FormLabel>
+                  {isPending ? (
+                    <LoaderPinwheel className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Send className="w-4 h-4" />
+                  )}
+                </FormLabel>
                 <FormControl>
-                  <Input
+                  <Textarea
                     placeholder="Describe the diagram you want to create..."
-                    className="pr-12"
+                    className="pr-12 min-h-[80px] resize-none"
                     {...field}
+                    disabled={isPending}
+                    onKeyDown={handleKeyDown}
                   />
                 </FormControl>
                 <FormMessage />
@@ -43,7 +65,7 @@ export const ChatInput = () => {
           <Button
             type="submit"
             size="sm"
-            className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
+            className="absolute right-2 bottom-2 h-8 w-8 p-0"
             disabled={isPending || !isFormValid}
           >
             {isPending ? (
@@ -54,7 +76,8 @@ export const ChatInput = () => {
           </Button>
         </div>
         <p className="text-xs text-muted-foreground">
-          Press Enter to send or click the send button
+          <BotMessageSquare className="inline" /> we are machines. we do
+          mistakes. we are learning. we are improving.
         </p>
       </form>
     </Form>
