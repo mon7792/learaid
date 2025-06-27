@@ -149,8 +149,10 @@ export const ChatContent = () => {
 
   // Memoized messages list to prevent unnecessary re-renders
   const messagesList = useMemo(() => {
-    return messages
-      .reverse()
+    const sortedMessages = messages.sort((a, b) => {
+      return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
+    });
+    return sortedMessages
       .map((message: ChatMessage) => (
         <MessageItem key={message.id} message={message} />
       ));
