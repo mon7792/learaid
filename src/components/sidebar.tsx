@@ -4,7 +4,6 @@ import { PanelLeft, MessageSquare, ChevronRight, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { useSession } from "@/lib/auth-client";
 import { useHydratedStore } from "@/store";
 import { useListDiagrams } from "@/features/diagram/api/query";
 import { UserProfile } from "@/features/auth/components/UserProfile";
@@ -14,13 +13,10 @@ import { NewDiagram } from "@/features/diagram/components/New";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-interface SidebarProps {
-  isOpen: boolean;
-  onToggle: () => void;
-}
+export function Sidebar() {
 
-export function Sidebar({ isOpen, onToggle }: SidebarProps) {
-  const { data: session } = useSession();
+  const { isSidebarOpen, setIsSidebarOpen } = useHydratedStore();
+  
   const router = useRouter();
   const { setCurrentDiagramId, setMermaid, diagrams } = useHydratedStore();
 
@@ -36,18 +32,13 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
     router.push(`/diagram/${diagramId}`);
   };
 
-  // Don't render sidebar if user is not authenticated
-  if (!session) {
-    return null;
-  }
-
   return (
     <>
       {/* Overlay - only on mobile when expanded */}
-      {isOpen && (
+      {isSidebarOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-40 md:hidden"
-          onClick={onToggle}
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         />
       )}
 
@@ -56,14 +47,14 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
         className={cn(
           "fixed left-0 top-0 z-50 h-full bg-background border-r border-border transition-all duration-300 ease-in-out",
           "flex flex-col",
-          isOpen
+          isSidebarOpen
             ? "w-80 md:w-64 translate-x-0"
             : "w-16 -translate-x-full md:translate-x-0"
         )}
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-border">
-          {isOpen ? (
+          {isSidebarOpen ? (
             <>
               {/* Logo */}
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
@@ -74,7 +65,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={onToggle}
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                 className=""
               >
                 <PanelLeft className="w-5 h-5" />
@@ -84,7 +75,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
             <div className="flex flex-col items-center w-full">
               {/* Logo */}
               <button
-                onClick={onToggle}
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                 className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center mb-3 hover:bg-primary/90 transition-colors"
               >
                 <Sparkles className="w-5 h-5 text-primary-foreground" />
@@ -95,12 +86,12 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
 
         {/* new diagram */}
         <div className="flex items-center justify-between p-3.5 border-border">
-          {isOpen ? <NewDiagram variant="outline" /> : <NewDiagram variant="icon" />}
+          {isSidebarOpen ? <NewDiagram variant="outline" /> : <NewDiagram variant="icon" />}
         </div>
 
         {/* Diagrams List */}
         <div className="flex-1 overflow-y-auto p-2">
-          {isOpen && (
+          {isSidebarOpen && (
             <>
               <div className="space-y-1">
                 {diagramData?.items.slice(0, 4).map((diagram) => (
@@ -143,10 +134,9 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
         {/* dashboard */}
         {/* User Section */}
         <div className="border-t border-border p-4">
-          {isOpen ? (
+          {isSidebarOpen ? (
             <UserProfileFooter />
           ) : (
-            // Collapsed user section - just avatar
             <div className="flex justify-center">
               <UserProfile />
             </div>

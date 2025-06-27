@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useHydratedStore } from "@/store";
+import { useSession } from "@/lib/auth-client";
 
 import { Sidebar } from "@/components/sidebar";
 
@@ -9,19 +10,16 @@ import { Footer } from "@/features/site/components/(home)/Footer";
 import { Content } from "@/features/site/components/(home)/Content";
 
 export default function Home() {
-
-  // TODO: move this to the store
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
+  const { data: session } = useSession();
+  const { isSidebarOpen } = useHydratedStore();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 flex flex-col">
-      <Sidebar isOpen={sidebarOpen} onToggle={toggleSidebar} />
+      {session && (
+        <Sidebar />
+      )}
       
-      <div className={`flex-1 transition-all duration-300 ${sidebarOpen ? 'md:ml-64' : 'md:ml-16'}`}>
+      <div className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'md:ml-64' : 'md:ml-16'}`}>
         <Header />
         <Content />
         <Footer />
