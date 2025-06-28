@@ -10,15 +10,6 @@ export interface StripeProduct {
 
 export const stripeProducts: StripeProduct[] = [
   {
-    id: 'prod_S4Icu1Etr7qMmr',
-    priceId: 'price_1RAA1ORx5lzCxHj0CAlRKW0p',
-    name: 'Hobby Plan',
-    description: 'Perfect for personal projects and small teams',
-    mode: 'subscription',
-    price: 49.99,
-    currency: 'EUR',
-  },
-  {
     id: 'prod_S4IX82dpFopOxZ',
     priceId: 'price_1RA9wDRx5lzCxHj0OC4hQ7zW',
     name: 'Hobby Plan',

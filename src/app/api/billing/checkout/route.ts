@@ -15,17 +15,17 @@ export async function POST(request: NextRequest) {
     }
 
     // Get the origin for dynamic URLs
-    const origin = request.headers.get("origin") || "http://localhost:3000";
+    const origin = request.headers.get("origin") || (process.env.APP_BASE_URL as string);
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
         {
           price_data: {
-            currency: "usd",
+            currency: "eur",
             product_data: {
-              name: "Your Product Name",
-              description: "Premium subscription plan",
+              name: "499 plan",
+              description: "50000 tokens",
             },
             unit_amount: 499, // $4.99
           },

@@ -1,13 +1,10 @@
-import { loadStripe } from "@stripe/stripe-js";
 import { BadgeEuro, Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
-);
+import getStripe from "@/config/stripe";
+import { useHydratedStore } from "@/store";
 
 interface CheckoutResponse {
   id: string;
@@ -16,15 +13,32 @@ interface CheckoutResponse {
 
 export const Checkout = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [stripeLoaded, setStripeLoaded] = useState(false);
+  const {  csrfToken } = useHydratedStore();
+
+  useEffect(() => {
+    // Check if Stripe can be loaded
+    const checkStripe = async () => {
+      try {
+        const stripe = await getStripe();
+        setStripeLoaded(!!stripe);
+      } catch (error) {
+        console.error("Failed to load Stripe:", error);
+        setStripeLoaded(false);
+      }
+    };
+    
+    checkStripe();
+  }, []);
 
   const handleCheckout = async () => {
-    if (isLoading) return;
+    if (isLoading || !stripeLoaded) return;
 
     setIsLoading(true);
     
     try {
       // Load Stripe
-      const stripe = await stripePromise;
+      const stripe = await getStripe();
       if (!stripe) {
         throw new Error("Failed to load Stripe");
       }
@@ -34,6 +48,7 @@ export const Checkout = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "X-CSRF-Token": csrfToken,
         },
       });
 
@@ -75,13 +90,18 @@ export const Checkout = () => {
   return (
     <Button 
       onClick={handleCheckout} 
-      disabled={isLoading}
+      disabled={isLoading || !stripeLoaded}
       className="cursor-pointer"
     >
       {isLoading ? (
         <>
           <Loader2 className="w-4 h-4 mr-2 animate-spin" />
           <span className="text-sm font-medium">Processing...</span>
+        </>
+      ) : !stripeLoaded ? (
+        <>
+          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+          <span className="text-sm font-medium">Loading...</span>
         </>
       ) : (
         <>

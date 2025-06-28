@@ -1,17 +1,14 @@
 "use client";
 
 import { useEffect } from "react";
-import { Sparkles } from "lucide-react";
-import Link from "next/link";
 
 import { useHydratedStore } from "@/store";
 import { useGetUserInfo } from "@/features/auth/api/query";
 
-import { ThemeModeSwitcher } from "@/components/theme-toggle";
 import { DiagramTable } from "@/features/diagram/components/Table";
 import { NewDiagram } from "@/features/diagram/components/New";
-import { UserProfile } from "@/features/auth/components/UserProfile";
 import { UserProfileCard } from "@/features/auth/components/UserProfile/card";
+import { Header } from "@/features/site/components/(app)/Header";
 
 export default function DashboardPage() {
   const { user, setUserResponse } = useHydratedStore();
@@ -35,22 +32,7 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
-      {/* Header */}
-      <header className="w-full p-6 flex justify-between items-center border-b bg-background/95 backdrop-blur">
-        <Link
-          href="/"
-          className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-        >
-          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-            <Sparkles className="w-5 h-5 text-primary-foreground" />
-          </div>
-          <span className="text-xl font-bold">Vanita</span>
-        </Link>
-        <div className="flex gap-3">
-          <ThemeModeSwitcher />
-          <UserProfile />
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-8">
