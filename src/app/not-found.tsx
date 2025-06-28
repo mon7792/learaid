@@ -1,4 +1,4 @@
-import { Sparkles, Home, Search, HelpCircle, ArrowLeft } from "lucide-react";
+import { Sparkles, Home, Search, HelpCircle } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -41,8 +41,8 @@ export default function NotFound() {
               Page Not Found
             </h1>
             <p className="text-lg text-muted-foreground max-w-md mx-auto leading-relaxed">
-              Oops! The page you&apos;re looking for seems to have wandered off into the digital void. 
-              Let&apos;s get you back on track.
+              Oops! The page you&apos;re looking for seems to have wandered off
+              into the digital void. Let&apos;s get you back on track.
             </p>
           </div>
 
@@ -52,12 +52,6 @@ export default function NotFound() {
               <Link href="/">
                 <Home className="w-5 h-5 mr-2" />
                 Go Home
-              </Link>
-            </Button>
-            <Button variant="outline" size="lg" asChild className="cursor-pointer">
-              <Link href="javascript:history.back()">
-                <ArrowLeft className="w-5 h-5 mr-2" />
-                Go Back
               </Link>
             </Button>
           </div>
@@ -70,25 +64,8 @@ export default function NotFound() {
                   <HelpCircle className="w-4 h-4 text-primary" />
                   <span>Popular Pages</span>
                 </div>
-                
-                <div className="grid grid-cols-1 gap-2">
-                  <Link
-                    href="/"
-                    className="flex items-center gap-3 p-3 text-left rounded-lg hover:bg-muted/50 transition-colors group"
-                  >
-                    <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
-                      <Sparkles className="w-4 h-4 text-primary" />
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium group-hover:text-primary transition-colors">
-                        Create Diagrams
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        Start generating AI-powered diagrams
-                      </div>
-                    </div>
-                  </Link>
 
+                <div className="grid grid-cols-1 gap-2">
                   <Link
                     href="/dashboard"
                     className="flex items-center gap-3 p-3 text-left rounded-lg hover:bg-muted/50 transition-colors group"
@@ -111,7 +88,9 @@ export default function NotFound() {
                     className="flex items-center gap-3 p-3 text-left rounded-lg hover:bg-muted/50 transition-colors group"
                   >
                     <div className="w-8 h-8 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center">
-                      <span className="text-sm font-bold text-green-600 dark:text-green-400">€</span>
+                      <span className="text-sm font-bold text-green-600 dark:text-green-400">
+                        €
+                      </span>
                     </div>
                     <div>
                       <div className="text-sm font-medium group-hover:text-primary transition-colors">
@@ -133,13 +112,22 @@ export default function NotFound() {
               Still can&apos;t find what you&apos;re looking for?
             </p>
             <div className="flex justify-center gap-4 text-sm">
-              <Link href="/support" className="text-primary hover:underline transition-colors">
+              <Link
+                href="/support"
+                className="text-primary hover:underline transition-colors"
+              >
                 Contact Support
               </Link>
-              <Link href="/privacy-policy" className="text-primary hover:underline transition-colors">
+              <Link
+                href="/privacy-policy"
+                className="text-primary hover:underline transition-colors"
+              >
                 Privacy Policy
               </Link>
-              <Link href="/terms-and-conditions" className="text-primary hover:underline transition-colors">
+              <Link
+                href="/terms-and-conditions"
+                className="text-primary hover:underline transition-colors"
+              >
                 Terms of Service
               </Link>
             </div>
