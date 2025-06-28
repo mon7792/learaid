@@ -1,6 +1,7 @@
 import { BadgeEuro, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import getStripe from "@/config/stripe";
@@ -15,6 +16,7 @@ export const Checkout = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [stripeLoaded, setStripeLoaded] = useState(false);
   const {  csrfToken } = useHydratedStore();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     // Check if Stripe can be loaded
@@ -65,6 +67,9 @@ export const Checkout = () => {
       if (!session.id) {
         throw new Error("No session ID received");
       }
+
+      // Invalidate user-info query before redirect to ensure fresh data after checkout
+      await queryClient.invalidateQueries({ queryKey: ["user-info"] });
 
       // Redirect to Stripe checkout
       const { error } = await stripe.redirectToCheckout({ 

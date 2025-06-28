@@ -18,7 +18,7 @@ import { useHydratedStore } from "@/store";
 
 
 export const BuyTokenDialog = () => {
-  const { buyDialogOpen, setBuyDialogOpen, user } = useHydratedStore();
+  const { buyDialogOpen, setBuyDialogOpen, tokens } = useHydratedStore();
 
   return (
     <AlertDialog open={buyDialogOpen} onOpenChange={setBuyDialogOpen}>
@@ -35,7 +35,7 @@ export const BuyTokenDialog = () => {
               <div className="flex items-center gap-2 mt-1">
                 <Coins className="w-4 h-4 text-muted-foreground" />
                 <span className="text-sm text-muted-foreground">
-                  Current balance: {user?.token.toLocaleString()} tokens
+                  Current balance: {tokens?.toLocaleString()} tokens
                 </span>
               </div>
             </div>

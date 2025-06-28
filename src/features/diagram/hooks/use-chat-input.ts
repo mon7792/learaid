@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useMemo } from "react";
 import { toast } from "sonner";
+import { useEffect } from "react";
 
 import { useHydratedStore } from "@/store";
 import { ChatMessage } from "@/features/diagram/types";
@@ -14,7 +15,7 @@ import { useGetTokens } from "@/features/billing/api/query";
 import { useEstimateTokenCost } from "@/features/billing/api/mutation";
 
 export const useChatInput = () => {
-  const { setMessages, setMermaid, id, diagrams, user, setBuyDialogOpen, csrfToken } =
+  const { setMessages, setMermaid, id, diagrams, tokens, setBuyDialogOpen, csrfToken } =
     useHydratedStore();
   const { getTokenTotal, getTokenEstimate } = useTokensCost();
 
@@ -63,7 +64,7 @@ export const useChatInput = () => {
 
   const checkSufficientTokens = async (message: string): Promise<boolean | null> => {
     // check if the user token is less than 0
-    if (user?.token && user.token < 0) {
+    if (tokens && tokens < 0) {
       return false;
     }
 
@@ -131,9 +132,15 @@ export const useChatInput = () => {
 };
 
 const useTokensCost = () => {
-  const { csrfToken } = useHydratedStore();
-  const { refetch: getTokenTotal } = useGetTokens();
+  const { csrfToken, setTokens } = useHydratedStore();
+  const { refetch: getTokenTotal, data: tokenTotal, isSuccess: isTokenTotalSuccess } = useGetTokens();
   const { mutateAsync: getTokenEstimate } = useEstimateTokenCost(csrfToken);
+
+  useEffect(() => {
+    if (isTokenTotalSuccess) {
+      setTokens(tokenTotal?.tokens || 0);
+    }
+  }, [isTokenTotalSuccess, tokenTotal, setTokens]);
 
   return {
     getTokenTotal,

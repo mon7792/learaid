@@ -20,7 +20,6 @@ export async function GET(request: NextRequest) {
     email: user.email,
     name: user.name,
     image: user.image,
-    token: billing?.token,
     plan: billing?.plan,
   } as UserResponse);
 }

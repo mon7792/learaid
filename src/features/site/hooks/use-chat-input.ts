@@ -5,7 +5,7 @@ import { z } from "zod";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   useCreateNewDiagram,
@@ -26,7 +26,8 @@ type UseChatInputReturnProps = {
 };
 
 export const useChatInput = (): UseChatInputReturnProps => {
-  const { user, setBuyDialogOpen, csrfToken, setMermaid } = useHydratedStore();
+  const { tokens, setBuyDialogOpen, csrfToken, setMermaid } =
+    useHydratedStore();
   const { getTokenTotal, getTokenEstimate } = useTokensCost(csrfToken);
   const [diagramId, setDiagramId] = useState<string | null>(null);
   const { data: session } = useSession();
@@ -82,9 +83,11 @@ export const useChatInput = (): UseChatInputReturnProps => {
       }
     );
 
-  const checkSufficientTokens = async (message: string): Promise<boolean | null> => {
+  const checkSufficientTokens = async (
+    message: string
+  ): Promise<boolean | null> => {
     // check if the user token is less than 0
-    if (user?.token && user.token < 0) {
+    if (tokens && tokens < 0) {
       return false;
     }
 
@@ -158,8 +161,19 @@ export const useChatInput = (): UseChatInputReturnProps => {
 };
 
 const useTokensCost = (csrfToken: string) => {
-  const { refetch: getTokenTotal } = useGetTokens();
+  const { setTokens } = useHydratedStore();
+  const {
+    refetch: getTokenTotal,
+    data: tokenTotal,
+    isSuccess: isTokenTotalSuccess,
+  } = useGetTokens();
   const { mutateAsync: getTokenEstimate } = useEstimateTokenCost(csrfToken);
+
+  useEffect(() => {
+    if (isTokenTotalSuccess) {
+      setTokens(tokenTotal?.tokens || 0);
+    }
+  }, [isTokenTotalSuccess, tokenTotal, setTokens]);
 
   return {
     getTokenTotal,

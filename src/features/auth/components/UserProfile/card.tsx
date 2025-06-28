@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { User, Coins } from "lucide-react";
 
 import { useHydratedStore } from "@/store";
-import { useGetUserInfo } from "@/features/auth/api/query";
+import { useGetUserInfo, useGetUserTokens } from "@/features/auth/api/query";
 
 import {
   Card,
@@ -17,11 +17,19 @@ import { Badge } from "@/components/ui/badge";
 import { Checkout } from "@/features/billing/components/Checkout";
 
 export function UserProfileCard() {
-  const { user, setUserResponse } = useHydratedStore();
+  const { user, setUserResponse, setTokens } = useHydratedStore();
 
   const { data: userInfo, refetch: refetchUserInfo } = useGetUserInfo(
     user === null
   );
+
+  const { data: userTokens } = useGetUserTokens();
+
+  useEffect(() => {
+    if (userTokens) {
+      setTokens(userTokens.tokens);
+    }
+  }, [userTokens, setTokens]);
 
   // user is null . the refetch will be triggered
   useEffect(() => {
@@ -68,7 +76,7 @@ export function UserProfileCard() {
               <Coins className="w-5 h-5 text-yellow-600" />
               <span className="text-sm font-medium">Token Balance:</span>
               <Badge variant="secondary" className="text-lg px-3 py-1">
-                {user?.token?.toLocaleString() || "0"}
+                {userTokens?.tokens?.toLocaleString() || "0"}
               </Badge>
             </div>
             <div className="flex items-center gap-2">
@@ -76,7 +84,7 @@ export function UserProfileCard() {
               <Badge>{user?.plan?.toUpperCase() || "BASE"}</Badge>
             </div>
           </div>
-          {user?.token && user.token < 2000 && (
+          {userTokens?.tokens && userTokens.tokens < 2000 && (
             <div className="flex w-full justify-end">
               <Checkout />
             </div>
