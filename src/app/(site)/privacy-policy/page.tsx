@@ -61,7 +61,7 @@ export default function PrivacyPolicyPage() {
             </CardHeader>
             <CardContent className="prose prose-neutral dark:prose-invert max-w-none">
               <p>
-                At Vanita ("we," "our," or "us"), we take your privacy seriously. This Privacy Policy 
+                At Vanita (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;), we take your privacy seriously. This Privacy Policy 
                 explains how we collect, use, process, and protect your personal information when you 
                 use our AI-powered diagram generation service.
               </p>
@@ -125,7 +125,7 @@ export default function PrivacyPolicyPage() {
               
               <h5>Service Delivery</h5>
               <ul>
-                <li>Process your prompts through OpenAI's API to generate diagrams</li>
+                <li>Process your prompts through OpenAI&apos;s API to generate diagrams</li>
                 <li>Store and retrieve your diagrams and conversation history</li>
                 <li>Manage your account and authentication</li>
                 <li>Process payments and manage token balances</li>
@@ -148,8 +148,8 @@ export default function PrivacyPolicyPage() {
 
               <h4>1.3 OpenAI API Integration</h4>
               <p>
-                Your diagram prompts are sent to OpenAI's API for processing. This data is subject to 
-                OpenAI's data usage policies. We recommend reviewing OpenAI's privacy policy for 
+                Your diagram prompts are sent to OpenAI&apos;s API for processing. This data is subject to 
+                OpenAI&apos;s data usage policies. We recommend reviewing OpenAI&apos;s privacy policy for 
                 details on how they handle API requests.
               </p>
               <ul>
@@ -270,7 +270,7 @@ export default function PrivacyPolicyPage() {
               <ul>
                 <li><strong>Service Updates:</strong> Opt-out of non-critical service announcements</li>
                 <li><strong>Beta Communications:</strong> Unsubscribe from beta testing communications</li>
-                <li><strong>Marketing:</strong> Opt-out of promotional emails (we currently don't send marketing emails)</li>
+                <li><strong>Marketing:</strong> Opt-out of promotional emails (we currently don&apos;t send marketing emails)</li>
                 <li><strong>Support Communications:</strong> Manage support ticket notifications</li>
               </ul>
 
@@ -299,8 +299,8 @@ export default function PrivacyPolicyPage() {
                 <li><strong>Purpose:</strong> AI-powered diagram generation from text prompts</li>
                 <li><strong>Data Shared:</strong> Text prompts, system messages for diagram generation</li>
                 <li><strong>Data Retention:</strong> OpenAI processes requests in real-time, data not permanently stored</li>
-                <li><strong>Privacy Policy:</strong> <a href="https://openai.com/privacy/" target=\"_blank" rel="noopener noreferrer\" className="text-primary hover:underline">OpenAI Privacy Policy</a></li>
-                <li><strong>Location:</strong> Data processed in OpenAI's global infrastructure</li>
+                <li><strong>Privacy Policy:</strong> <a href="https://openai.com/privacy/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">OpenAI Privacy Policy</a></li>
+                <li><strong>Location:</strong> Data processed in OpenAI&apos;s global infrastructure</li>
               </ul>
 
               <h4>4.2 GitHub OAuth (Authentication)</h4>
@@ -308,7 +308,7 @@ export default function PrivacyPolicyPage() {
                 <li><strong>Purpose:</strong> Secure user authentication and account creation</li>
                 <li><strong>Data Shared:</strong> Public profile information, email address</li>
                 <li><strong>Data Retention:</strong> Profile data cached during active sessions</li>
-                <li><strong>Privacy Policy:</strong> <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target=\"_blank" rel="noopener noreferrer\" className="text-primary hover:underline">GitHub Privacy Statement</a></li>
+                <li><strong>Privacy Policy:</strong> <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">GitHub Privacy Statement</a></li>
                 <li><strong>Location:</strong> Global GitHub infrastructure</li>
               </ul>
 
@@ -317,7 +317,7 @@ export default function PrivacyPolicyPage() {
                 <li><strong>Purpose:</strong> Secure payment processing for token purchases</li>
                 <li><strong>Data Shared:</strong> Customer ID, transaction amounts, payment metadata</li>
                 <li><strong>Data Retention:</strong> Payment records retained per financial regulations</li>
-                <li><strong>Privacy Policy:</strong> <a href="https://stripe.com/privacy" target=\"_blank" rel="noopener noreferrer\" className="text-primary hover:underline">Stripe Privacy Policy</a></li>
+                <li><strong>Privacy Policy:</strong> <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Stripe Privacy Policy</a></li>
                 <li><strong>Location:</strong> EU and US data centers (GDPR compliant)</li>
                 <li><strong>Compliance:</strong> PCI DSS Level 1 certified</li>
               </ul>
@@ -437,7 +437,7 @@ export default function PrivacyPolicyPage() {
           {/* Children's Privacy */}
           <Card>
             <CardHeader>
-              <CardTitle>7. Children's Privacy</CardTitle>
+              <CardTitle>7. Children&apos;s Privacy</CardTitle>
             </CardHeader>
             <CardContent className="prose prose-neutral dark:prose-invert max-w-none">
               <p>
@@ -466,7 +466,7 @@ export default function PrivacyPolicyPage() {
               <p>We may update this Privacy Policy from time to time. When we do:</p>
               <ul>
                 <li>We will post the updated policy on this page</li>
-                <li>We will update the "Last Updated" date</li>
+                <li>We will update the &quot;Last Updated&quot; date</li>
                 <li>For significant changes, we will notify you via email or service notification</li>
                 <li>You will have the opportunity to review changes before they take effect</li>
               </ul>
@@ -501,7 +501,7 @@ export default function PrivacyPolicyPage() {
               <p>For privacy-related questions, requests, or concerns, contact us at:</p>
               <ul>
                 <li><strong>Email:</strong> privacy@vanita.app</li>
-                <li><strong>Support Portal:</strong> <Link href="/support" className=\"text-primary hover:underline">vanita.app/support</Link></li>
+                <li><strong>Support Portal:</strong> <Link href="/support" className="text-primary hover:underline">vanita.app/support</Link></li>
                 <li><strong>Response Time:</strong> We respond to privacy requests within 30 days</li>
               </ul>
 
@@ -509,7 +509,7 @@ export default function PrivacyPolicyPage() {
               <p>For EU residents, you can contact our Data Protection Officer at:</p>
               <ul>
                 <li><strong>Email:</strong> dpo@vanita.app</li>
-                <li><strong>Subject Line:</strong> "GDPR Request" or "Data Protection Inquiry"</li>
+                <li><strong>Subject Line:</strong> &quot;GDPR Request&quot; or &quot;Data Protection Inquiry&quot;</li>
               </ul>
 
               <h4>9.3 Regulatory Authorities</h4>
@@ -525,7 +525,7 @@ export default function PrivacyPolicyPage() {
               </p>
               <ul>
                 <li><strong>Email:</strong> security@vanita.app</li>
-                <li><strong>Subject Line:</strong> "URGENT - Security Issue"</li>
+                <li><strong>Subject Line:</strong> &quot;URGENT - Security Issue&quot;</li>
                 <li><strong>Response Time:</strong> 24-48 hours for security issues</li>
               </ul>
             </CardContent>
@@ -535,7 +535,7 @@ export default function PrivacyPolicyPage() {
           <div className="text-center pt-8 border-t">
             <p className="text-sm text-muted-foreground">
               We are committed to protecting your privacy and ensuring transparency in our data practices. 
-              If you have any questions or concerns, please don't hesitate to contact us.
+              If you have any questions or concerns, please don&apos;t hesitate to contact us.
             </p>
             <div className="mt-4 flex justify-center gap-6 text-sm">
               <Link href="/terms-and-conditions" className="text-primary hover:underline">
