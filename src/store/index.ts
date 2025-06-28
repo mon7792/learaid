@@ -7,13 +7,15 @@ import { createHydrationSlice } from "./hydration/hydration.slice";
 import { createUserSlice } from "./user/user.slice";
 import { createSidebarSlice } from "./sidebar/sidebar.slice";
 import { createBuyDialogSlice } from "./buy/buy.slice";
+import { createCsrfSlice } from "./csrf/csrf.slice";
 
 export const useStore = create<
   ReturnType<typeof createHydrationSlice> &
     ReturnType<typeof createDiagramSlice> &
     ReturnType<typeof createUserSlice> &
     ReturnType<typeof createSidebarSlice> &
-    ReturnType<typeof createBuyDialogSlice>
+    ReturnType<typeof createBuyDialogSlice> &
+    ReturnType<typeof createCsrfSlice>
 >()(
   devtools(
     persist(
@@ -23,6 +25,7 @@ export const useStore = create<
         ...createUserSlice(...a),
         ...createSidebarSlice(...a),
         ...createBuyDialogSlice(...a),
+        ...createCsrfSlice(...a),
       }),
       {
         name: "Vanita-storage",

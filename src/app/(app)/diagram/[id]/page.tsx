@@ -1,4 +1,5 @@
 import DiagramWorkspace from "@/components/diagram-workspace";
+import { getCsrfToken } from "@/utils/csrf";
 
 interface DiagramPageProps {
   params: Promise<{
@@ -9,9 +10,11 @@ interface DiagramPageProps {
 export default async function DiagramPage({ params }: DiagramPageProps) {
   const { id } = await params;
 
+  const csrfToken = await getCsrfToken();
+
   return (
     <div className="h-screen flex flex-col">
-      <DiagramWorkspace diagramId={id} />
+      <DiagramWorkspace diagramId={id} csrfToken={csrfToken} />
     </div>
   );
 }

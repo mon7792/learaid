@@ -3,12 +3,14 @@ import { Paginated } from "@/types";
 
 export const generateDiagram = async (
   id: string,
-  message: string
+  message: string,
+  csrfToken: string
 ): Promise<ChatMessage> => {
   const response = await fetch(`/api/diagram/${id}/generate`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "X-CSRF-Token": csrfToken,
     },
     body: JSON.stringify({ message }),
     credentials: "include",
@@ -24,12 +26,14 @@ export const generateDiagram = async (
 };
 
 export const createNewDiagram = async (
-  message: string
+  message: string,
+  csrfToken: string
 ): Promise<DiagramResponse> => {
   const response = await fetch("/api/diagram", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "X-CSRF-Token": csrfToken,
     },
     body: JSON.stringify({ message }),
     credentials: "include",
@@ -67,10 +71,9 @@ export const listDiagrams = async (
   return data;
 };
 
-
 export const listMessages = async (
   id: string,
-  cursor?: string,
+  cursor?: string
 ): Promise<DiagramResponse> => {
   const queryParams = new URLSearchParams();
   if (cursor) {

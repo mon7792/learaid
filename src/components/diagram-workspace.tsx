@@ -32,22 +32,29 @@ const ExcalidrawWrapper = dynamic(
 
 interface DiagramWorkspaceProps {
   diagramId: string;
+  csrfToken?: string;
 }
 
-export default function DiagramWorkspace({ diagramId }: DiagramWorkspaceProps) {
+export default function DiagramWorkspace({ diagramId, csrfToken }: DiagramWorkspaceProps) {
   // this temporary solution to set the diagram id in the store
   const {
     data: diagramData,
     isLoading: isLoadingDiagram,
     refetch: refetchDiagram,
   } = useListMessages(diagramId, false);
-  const { setCurrentDiagramId, setDiagrams, isHydrated, diagrams } =
+  const { setCurrentDiagramId, setDiagrams, isHydrated, diagrams, setCsrfToken } =
     useHydratedStore();
 
   const diagramTitle = useMemo(
     () => diagrams.find((d) => d.id === diagramId)?.name ?? "",
     [diagrams, diagramId]
   );
+
+  useEffect(() => {
+    if (csrfToken) {
+      setCsrfToken(csrfToken);
+    }
+  }, [csrfToken, setCsrfToken]);
 
   useEffect(() => {
     // Only initialize when the store is hydrated

@@ -8,6 +8,9 @@ import { createUserBilling } from "@/features/auth/model";
 import { redisClient as redis } from "@/config/cache";
 
 export const auth = betterAuth({
+  appName: process.env.APP_NAME as string,
+  baseURL: process.env.APP_BASE_URL as string,
+  trustedOrigins: (process.env.APP_TRUSTED_ORIGIN as string).split(","),
   socialProviders: {
     github: {
       clientId: process.env.GITHUB_CLIENT_ID as string,
@@ -55,6 +58,7 @@ export const auth = betterAuth({
   rateLimit: {
     enabled: true,
     window: 10,
-    max: 100
+    max: 100,
+    storage: "secondary-storage",
   },
 });

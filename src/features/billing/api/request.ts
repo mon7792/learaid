@@ -18,12 +18,14 @@ export const getTokens = async (): Promise<UserTokenResponse> => {
 };
 
 export const estimateTokensCost = async (
-  message: string
+  message: string,
+  csrfToken: string
 ): Promise<UserTokenResponse> => {
   const response = await fetch("/api/me/tokens/estimate", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "X-CSRF-Token": csrfToken,
     },
     body: JSON.stringify({ message }),
     credentials: "include",

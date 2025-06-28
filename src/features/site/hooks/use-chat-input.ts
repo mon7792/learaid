@@ -26,8 +26,8 @@ type UseChatInputReturnProps = {
 };
 
 export const useChatInput = (): UseChatInputReturnProps => {
-  const { user, setBuyDialogOpen } = useHydratedStore();
-  const { getTokenTotal, getTokenEstimate } = useTokensCost();
+  const { user, setBuyDialogOpen, csrfToken, setMermaid } = useHydratedStore();
+  const { getTokenTotal, getTokenEstimate } = useTokensCost(csrfToken);
   const [diagramId, setDiagramId] = useState<string | null>(null);
   const { data: session } = useSession();
   const router = useRouter();
@@ -40,7 +40,9 @@ export const useChatInput = (): UseChatInputReturnProps => {
 
   const { mutate: generateDiagram, isPending: isGeneratingDiagram } =
     useGenerateDiagram(
-      () => {
+      csrfToken,
+      (data) => {
+        setMermaid(data.mermaid || null);
         toast.success("Diagram generated successfully");
         router.push(`/diagram/${diagramId}`);
       },
@@ -60,6 +62,7 @@ export const useChatInput = (): UseChatInputReturnProps => {
 
   const { mutate: createNewDiagram, isPending: isCreatingNewDiagram } =
     useCreateNewDiagram(
+      csrfToken,
       (data) => {
         toast.success("Diagram created successfully");
         setDiagramId(data.id);
@@ -79,7 +82,7 @@ export const useChatInput = (): UseChatInputReturnProps => {
       }
     );
 
-  const checkSufficientTokens = async (message: string): Promise<boolean> => {
+  const checkSufficientTokens = async (message: string): Promise<boolean | null> => {
     // check if the user token is less than 0
     if (user?.token && user.token < 0) {
       return false;
@@ -93,8 +96,7 @@ export const useChatInput = (): UseChatInputReturnProps => {
       tokenTotal = tokens?.data?.tokens || 0;
     } catch (error) {
       console.error("Failed to get token total:", error);
-      toast.error("Failed to get token total. Please try again.");
-      return false;
+      return null;
     }
 
     try {
@@ -102,8 +104,7 @@ export const useChatInput = (): UseChatInputReturnProps => {
       tokenEstimate = estimatedTokens.tokens || 0;
     } catch (error) {
       console.error("Failed to get token estimate:", error);
-      toast.error("Failed to get token estimate. Please try again.");
-      return false;
+      return null;
     }
 
     // Check if the user has sufficient tokens
@@ -121,8 +122,16 @@ export const useChatInput = (): UseChatInputReturnProps => {
     }
 
     const isSufficientTokens = await checkSufficientTokens(values.message);
-    if (!isSufficientTokens) {
+
+    if (isSufficientTokens === null) {
+      toast.error("Something went wrong. refresh the page and try again.");
+      form.setFocus("message");
+      return;
+    }
+
+    if (isSufficientTokens === false) {
       setBuyDialogOpen(true);
+      form.setFocus("message");
       return;
     }
 
@@ -148,9 +157,9 @@ export const useChatInput = (): UseChatInputReturnProps => {
   };
 };
 
-const useTokensCost = () => {
+const useTokensCost = (csrfToken: string) => {
   const { refetch: getTokenTotal } = useGetTokens();
-  const { mutateAsync: getTokenEstimate } = useEstimateTokenCost();
+  const { mutateAsync: getTokenEstimate } = useEstimateTokenCost(csrfToken);
 
   return {
     getTokenTotal,

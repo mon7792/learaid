@@ -14,7 +14,7 @@ import { useGetTokens } from "@/features/billing/api/query";
 import { useEstimateTokenCost } from "@/features/billing/api/mutation";
 
 export const useChatInput = () => {
-  const { setMessages, setMermaid, id, diagrams, user, setBuyDialogOpen } =
+  const { setMessages, setMermaid, id, diagrams, user, setBuyDialogOpen, csrfToken } =
     useHydratedStore();
   const { getTokenTotal, getTokenEstimate } = useTokensCost();
 
@@ -31,14 +31,16 @@ export const useChatInput = () => {
   });
 
   const { mutate: generateDiagram, isPending } = useGenerateDiagram(
+    csrfToken,
     (data) => {
-      console.log("data", data);
       addAiMessage(data);
       setMermaid(data.mermaid || null);
       form.reset();
     },
     (error) => {
       console.error("error", error);
+      toast.error("Something went wrong. refresh the page and try again.");
+      form.setFocus("message");
     }
   );
 
@@ -59,7 +61,7 @@ export const useChatInput = () => {
     setMessages([...messages, message]);
   };
 
-  const checkSufficientTokens = async (message: string): Promise<boolean> => {
+  const checkSufficientTokens = async (message: string): Promise<boolean | null> => {
     // check if the user token is less than 0
     if (user?.token && user.token < 0) {
       return false;
@@ -73,8 +75,7 @@ export const useChatInput = () => {
       tokenTotal = tokens?.data?.tokens || 0;
     } catch (error) {
       console.error("Failed to get token total:", error);
-      toast.error("Failed to get token total. Please try again.");
-      return false;
+      return null;
     }
 
     try {
@@ -82,8 +83,7 @@ export const useChatInput = () => {
       tokenEstimate = estimatedTokens.tokens || 0;
     } catch (error) {
       console.error("Failed to get token estimate:", error);
-      toast.error("Failed to get token estimate. Please try again.");
-      return false;
+      return null;
     }
 
     // Check if the user has sufficient tokens
@@ -99,7 +99,15 @@ export const useChatInput = () => {
 
     // check if the user has sufficient tokens
     const isSufficientTokens = await checkSufficientTokens(values.message);
-    if (!isSufficientTokens) {
+
+    // handle the csrf token error
+    if (isSufficientTokens === null) {
+      toast.error("Something went wrong. refresh the page and try again.");
+      form.setFocus("message");
+      return;
+    }
+
+    if (isSufficientTokens === false) {
       setBuyDialogOpen(true);
       form.setFocus("message");
       return;
@@ -123,8 +131,9 @@ export const useChatInput = () => {
 };
 
 const useTokensCost = () => {
+  const { csrfToken } = useHydratedStore();
   const { refetch: getTokenTotal } = useGetTokens();
-  const { mutateAsync: getTokenEstimate } = useEstimateTokenCost();
+  const { mutateAsync: getTokenEstimate } = useEstimateTokenCost(csrfToken);
 
   return {
     getTokenTotal,
