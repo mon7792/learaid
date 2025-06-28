@@ -1,5 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+
+import { NextRequest, NextResponse } from "next/server";
+import { getUser, isAuthenticated } from "@/utils/auth";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: "2025-05-28.basil",
@@ -12,6 +14,15 @@ export async function POST(request: NextRequest) {
         { error: "Method Not Allowed" }, 
         { status: 405 }
       );
+    }
+    const isAuth = await isAuthenticated(request);
+    if (!isAuth) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const user = await getUser();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Get the origin for dynamic URLs
@@ -37,6 +48,7 @@ export async function POST(request: NextRequest) {
       cancel_url: `${origin}/cancel`,
       metadata: {
         source: "web_checkout",
+        userId: user.id,
       },
     });
 

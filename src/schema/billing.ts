@@ -38,7 +38,7 @@ export const userPurchase = pgTable("user_purchase", {
 	userId: text("user_id").notNull().references(() => user.id, { onDelete: 'cascade' }),
 	tokensAdded: integer("tokens_added").notNull(),
 	pricePaid: integer("price_paid").notNull(),
-	currency: text("currency").notNull().default('usd'),
+	currency: text("currency").notNull().default('eur'),
 	stripeCheckoutSessionId: text("stripe_checkout_session_id").notNull().unique(),
 	stripePaymentIntentId: text("stripe_payment_intent_id").unique(),
 	status: statusEnum("status").notNull().default('PENDING'),

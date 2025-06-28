@@ -15,10 +15,11 @@ type NewDiagramProps = {
 
 export const NewDiagram = ({ variant = "default" }: NewDiagramProps) => {
   const router = useRouter();
-  const { setCurrentDiagramId, setMermaid, diagrams, setDiagrams } =
+  const { setCurrentDiagramId, setMermaid, diagrams, setDiagrams , csrfToken} =
     useHydratedStore();
   const { mutate: createNewDiagram, isPending: isCreatingNewDiagram } =
     useCreateNewDiagram(
+      csrfToken,
       (data) => {
         // notify user
         toast.success("New diagram created");
