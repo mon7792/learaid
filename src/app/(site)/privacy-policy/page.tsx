@@ -299,7 +299,7 @@ export default function PrivacyPolicyPage() {
                 <li><strong>Purpose:</strong> AI-powered diagram generation from text prompts</li>
                 <li><strong>Data Shared:</strong> Text prompts, system messages for diagram generation</li>
                 <li><strong>Data Retention:</strong> OpenAI processes requests in real-time, data not permanently stored</li>
-                <li><strong>Privacy Policy:</strong> <a href="https://openai.com/privacy/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">OpenAI Privacy Policy</a></li>
+                <li><strong>Privacy Policy:</strong> <a href="https://openai.com/privacy/" target=\"_blank" rel="noopener noreferrer\" className="text-primary hover:underline">OpenAI Privacy Policy</a></li>
                 <li><strong>Location:</strong> Data processed in OpenAI's global infrastructure</li>
               </ul>
 
@@ -308,7 +308,7 @@ export default function PrivacyPolicyPage() {
                 <li><strong>Purpose:</strong> Secure user authentication and account creation</li>
                 <li><strong>Data Shared:</strong> Public profile information, email address</li>
                 <li><strong>Data Retention:</strong> Profile data cached during active sessions</li>
-                <li><strong>Privacy Policy:</strong> <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">GitHub Privacy Statement</a></li>
+                <li><strong>Privacy Policy:</strong> <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target=\"_blank" rel="noopener noreferrer\" className="text-primary hover:underline">GitHub Privacy Statement</a></li>
                 <li><strong>Location:</strong> Global GitHub infrastructure</li>
               </ul>
 
@@ -317,7 +317,7 @@ export default function PrivacyPolicyPage() {
                 <li><strong>Purpose:</strong> Secure payment processing for token purchases</li>
                 <li><strong>Data Shared:</strong> Customer ID, transaction amounts, payment metadata</li>
                 <li><strong>Data Retention:</strong> Payment records retained per financial regulations</li>
-                <li><strong>Privacy Policy:</strong> <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Stripe Privacy Policy</a></li>
+                <li><strong>Privacy Policy:</strong> <a href="https://stripe.com/privacy" target=\"_blank" rel="noopener noreferrer\" className="text-primary hover:underline">Stripe Privacy Policy</a></li>
                 <li><strong>Location:</strong> EU and US data centers (GDPR compliant)</li>
                 <li><strong>Compliance:</strong> PCI DSS Level 1 certified</li>
               </ul>
@@ -501,7 +501,7 @@ export default function PrivacyPolicyPage() {
               <p>For privacy-related questions, requests, or concerns, contact us at:</p>
               <ul>
                 <li><strong>Email:</strong> privacy@vanita.app</li>
-                <li><strong>Support Portal:</strong> <Link href="/support" className="text-primary hover:underline">vanita.app/support</Link></li>
+                <li><strong>Support Portal:</strong> <Link href="/support" className=\"text-primary hover:underline">vanita.app/support</Link></li>
                 <li><strong>Response Time:</strong> We respond to privacy requests within 30 days</li>
               </ul>
 
