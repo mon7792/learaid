@@ -1,0 +1,1 @@
+ALTER TABLE "user_purchase" ALTER COLUMN "currency" SET DEFAULT 'eur';

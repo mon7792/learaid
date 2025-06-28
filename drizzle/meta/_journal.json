@@ -15,6 +15,13 @@
       "when": 1750866386366,
       "tag": "0001_dry_lizard",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1751150360153,
+      "tag": "0002_pretty_thunderball",
+      "breakpoints": true
     }
   ]
 }
