@@ -2,9 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 function getCorsHeaders(request: NextRequest) {
-  const allowedOrigins = [
-    'http://localhost:3000'
-  ];
+  const allowedOrigins = process.env.APP_TRUSTED_ORIGIN?.split(',') || [];
   const origin = request.headers.get('origin') || '';
   
   return {

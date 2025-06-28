@@ -61,9 +61,9 @@ export default function TermsAndConditionsPage() {
             </CardHeader>
             <CardContent className="prose prose-neutral dark:prose-invert max-w-none">
               <p>
-                Welcome to Vanita ("we," "our," or "us"), an AI-powered diagram generation 
-                service. These Terms and Conditions ("Terms") govern your use of our website, 
-                application, and services (collectively, the "Service") operated by Vanita.
+                Welcome to Vanita (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;), an AI-powered diagram generation 
+                service. These Terms and Conditions (&quot;Terms&quot;) govern your use of our website, 
+                application, and services (collectively, the &quot;Service&quot;) operated by Vanita.
               </p>
               <p>
                 By accessing or using our Service, you agree to be bound by these Terms. 
@@ -125,7 +125,7 @@ export default function TermsAndConditionsPage() {
                 <li>Generate content that infringes on intellectual property rights</li>
                 <li>Create misleading, false, or deceptive content</li>
                 <li>Overload our systems or attempt to disrupt service availability</li>
-                <li>Use the Service in violation of OpenAI's usage policies</li>
+                <li>Use the Service in violation of OpenAI&apos;s usage policies</li>
               </ul>
             </CardContent>
           </Card>
@@ -179,7 +179,7 @@ export default function TermsAndConditionsPage() {
 
               <h4>5.2 Data Processing</h4>
               <ul>
-                <li>Your prompts are sent to OpenAI's API for diagram generation</li>
+                <li>Your prompts are sent to OpenAI&apos;s API for diagram generation</li>
                 <li>We store diagrams and conversation history for your account access</li>
                 <li>We implement appropriate security measures to protect your data</li>
               </ul>
@@ -208,7 +208,7 @@ export default function TermsAndConditionsPage() {
               <h4>6.3 AI-Generated Content Rights</h4>
               <ul>
                 <li>You may use generated diagrams for personal and commercial purposes</li>
-                <li>You are responsible for ensuring generated content doesn't infringe third-party rights</li>
+                <li>You are responsible for ensuring generated content doesn&apos;t infringe third-party rights</li>
                 <li>We make no warranties regarding the originality of AI-generated content</li>
               </ul>
             </CardContent>
@@ -245,8 +245,8 @@ export default function TermsAndConditionsPage() {
             <CardContent className="prose prose-neutral dark:prose-invert max-w-none">
               <h4>8.1 OpenAI API Integration</h4>
               <ul>
-                <li>Our Service relies on OpenAI's API for diagram generation</li>
-                <li>Usage is subject to OpenAI's terms of service and usage policies</li>
+                <li>Our Service relies on OpenAI&apos;s API for diagram generation</li>
+                <li>Usage is subject to OpenAI&apos;s terms of service and usage policies</li>
                 <li>Service availability depends on third-party API availability</li>
               </ul>
 
@@ -286,7 +286,7 @@ export default function TermsAndConditionsPage() {
             <CardContent className="prose prose-neutral dark:prose-invert max-w-none">
               <p>To the maximum extent permitted by law:</p>
               <ul>
-                <li>The Service is provided "as is" without warranties of any kind</li>
+                <li>The Service is provided &quot;as is&quot; without warranties of any kind</li>
                 <li>We are not liable for any indirect, incidental, or consequential damages</li>
                 <li>Our total liability is limited to the amount you paid for the Service in the past 12 months</li>
                 <li>We are not responsible for third-party content or services</li>

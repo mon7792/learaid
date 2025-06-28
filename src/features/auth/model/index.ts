@@ -17,7 +17,7 @@ export const createUserBilling = async (userID: string) => {
     updatedAt: new Date(),
     userId: userID,
     plan: "base",
-    tokens: 1000,
+    tokens: 4999,
     stripeCustomerId: null,
     lastBilledAt: null,
   };
