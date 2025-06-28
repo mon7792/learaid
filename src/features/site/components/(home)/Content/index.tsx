@@ -1,6 +1,7 @@
 "use client";
 
 import { ChatTextarea } from "./input";
+import { DiagramOptions } from "../DiagramOptions";
 
 export const Content = () => {
   return (
@@ -20,6 +21,11 @@ export const Content = () => {
 
         {/* Input Section */}
         <ChatTextarea />
+      </div>
+
+      {/* Diagram Options Showcase */}
+      <div className="w-full max-w-7xl mx-auto mt-24 mb-16">
+        <DiagramOptions />
       </div>
     </main>
   );
