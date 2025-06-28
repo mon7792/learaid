@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Sora, Source_Code_Pro } from "next/font/google";
 
 import { ThemeProvider } from "@/contexts/theme-context";
 import { TanstackProvider } from "@/provider/tanstack";
@@ -18,6 +18,16 @@ const geistMono = Geist_Mono({
   variable: "--font-mono",
 });
 
+const fontSora = Sora({
+  subsets: ["latin"],
+  variable: "--font-sora",
+});
+
+const fontSourceCodePro = Source_Code_Pro({
+  subsets: ["latin"],
+  variable: "--font-source-code-pro",
+});
+
 export const metadata: Metadata = {
   title: "Vanita",
   description: "Your AI-powered learning assistant for complex subjects.",
@@ -29,8 +39,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
-      <body>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${fontSora.variable} ${fontSourceCodePro.variable}`} suppressHydrationWarning>
+      <body className="font-source-code-pro">
         <ThemeProvider>
           <TanstackProvider>
           <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>

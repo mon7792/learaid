@@ -11,9 +11,8 @@ import {
 } from "@/components/ui/card";
 import { Header } from "@/features/site/components/(app)/Header";
 import { Footer } from "@/features/site/components/(home)/Footer";
-import { Checkout } from "@/features/billing/components/Checkout";
 
-export default function BuyPage() {
+export default function PricingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
       <Header />
@@ -67,10 +66,6 @@ export default function BuyPage() {
                     <Check className="w-4 h-4 text-green-500" />
                     <span className="text-sm">Cloud storage</span>
                   </div>
-                </div>
-
-                <div className="max-w-md mx-auto">
-                  <Checkout />
                 </div>
                 <p className="text-sm text-muted-foreground">
                   Simple and transparent pricing. No hidden fees. all the tokens

@@ -14,7 +14,7 @@ export const Header = () => {
         <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
           <Sparkles className="w-5 h-5 text-primary-foreground" />
         </div>
-        <span className="text-xl font-bold">Vanita</span>
+        <span className="text-2xl font-bold font-sora">Vanita</span>
       </Link>
       <div className="flex gap-3">
         <ThemeModeSwitcher />

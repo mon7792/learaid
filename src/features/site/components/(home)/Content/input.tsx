@@ -80,7 +80,7 @@ export const ChatTextarea = () => {
           </Button>
         </div>
 
-        <div className="flex items-center justify-center text-sm text-muted-foreground">
+        <div className="flex items-center justify-center text-sm text-muted-foreground font-sora">
           <Lightbulb className="w-4 h-4 mr-2" />
           Press Enter to generate or click the arrow
         </div>
@@ -100,8 +100,7 @@ export const ChatTextarea = () => {
                 disabled={isPending}
               >
                 <div className="flex items-start gap-3">
-                  {/* <div className="w-2 h-2 bg-primary rounded-full mt-2 group-hover:bg-accent-foreground transition-colors" /> */}
-                  <span className="text-sm text-card-foreground group-hover:text-accent-foreground transition-colors">
+                  <span className="text-sm text-card-foreground group-hover:text-accent-foreground transition-colors font-source-code-pro">
                     {prompt}
                   </span>
                 </div>
