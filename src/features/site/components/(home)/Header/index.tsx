@@ -14,7 +14,9 @@ export const Header = () => {
   return (
     <header className="w-full p-6 flex justify-between items-center z-10">
       <div className="flex items-center gap-2">
-        <span className="text-2xl font-bold text-primary tracking-wider font-sora">Vanita</span>
+        <Link href="/">
+          <span className="text-2xl font-bold text-primary tracking-wider font-sora">Vanita</span>
+        </Link>
       </div>
       <div className="flex gap-3">
         <ThemeModeSwitcher />
