@@ -22,6 +22,13 @@
       "when": 1751150360153,
       "tag": "0002_pretty_thunderball",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1751199910727,
+      "tag": "0003_high_celestials",
+      "breakpoints": true
     }
   ]
 }
