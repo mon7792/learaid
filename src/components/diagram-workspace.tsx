@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { Sparkles, Loader2 } from "lucide-react";
+import { Loader2, DraftingCompass } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
 
@@ -77,7 +77,7 @@ const DiagramSection = () => {
             className="flex items-center gap-2 hover:opacity-80 transition-opacity"
           >
             <div className="w-6 h-6 bg-primary rounded-md flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-primary-foreground" />
+            <DraftingCompass className="w-4 h-4 text-primary-foreground rotate-180" />
             </div>
             <span className="font-semibold text-2xl font-sora">Vanita</span>
           </Link>

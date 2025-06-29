@@ -1,4 +1,4 @@
-import { Sparkles, ScrollText, Shield, AlertTriangle } from "lucide-react";
+import { ScrollText, Shield, AlertTriangle, DraftingCompass } from "lucide-react";
 import Link from "next/link";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,7 +17,7 @@ export default function TermsAndConditionsPage() {
           className="flex items-center gap-2 hover:opacity-80 transition-opacity"
         >
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-            <Sparkles className="w-5 h-5 text-primary-foreground" />
+          <DraftingCompass className="w-5 h-5 text-primary-foreground rotate-180" />
           </div>
           <span className="text-2xl font-bold font-sora">Vanita</span>
         </Link>

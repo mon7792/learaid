@@ -1,4 +1,4 @@
-import { Sparkles, Zap, Palette, Brain } from "lucide-react";
+import { Zap, Palette, Brain, DraftingCompass } from "lucide-react";
 import Link from "next/link";
 
 import {
@@ -24,7 +24,7 @@ export default function SignupPage() {
             {/* Logo and Brand */}
             <div className="flex items-center justify-center gap-3">
               <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center shadow-lg">
-                <Sparkles className="w-7 h-7 text-primary-foreground" />
+              <DraftingCompass className="w-5 h-5 text-primary-foreground rotate-180" />
               </div>
               <span className="text-3xl font-bold">Vanita</span>
             </div>
@@ -79,7 +79,7 @@ export default function SignupPage() {
               className="inline-flex items-center gap-2 hover:opacity-80 transition-opacity"
             >
               <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-primary-foreground" />
+              <DraftingCompass className="w-5 h-5 text-primary-foreground rotate-180" />
               </div>
               <span className="text-2xl font-bold">Vanita</span>
             </Link>

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Sparkles, CheckCircle, ArrowRight } from 'lucide-react';
+import { CheckCircle, ArrowRight, DraftingCompass } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
@@ -38,7 +38,7 @@ export default function SuccessPage() {
       <header className="w-full p-6 flex justify-between items-center">
         <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-            <Sparkles className="w-5 h-5 text-primary-foreground" />
+          <DraftingCompass className="w-5 h-5 text-primary-foreground rotate-180" />
           </div>
           <span className="text-xl font-bold">Vanita</span>
         </Link>

@@ -1,6 +1,6 @@
 "use client";
 
-import { PanelLeft, MessageSquare, ChevronRight, Sparkles } from "lucide-react";
+import { PanelLeft, MessageSquare, ChevronRight, DraftingCompass } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -58,7 +58,7 @@ export function Sidebar() {
             <>
               {/* Logo */}
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-primary-foreground" />
+                <DraftingCompass className="w-5 h-5 text-primary-foreground rotate-180" />
               </div>
 
               {/* Sidebar Toggle */}
@@ -78,7 +78,7 @@ export function Sidebar() {
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                 className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center mb-3 hover:bg-primary/90 transition-colors"
               >
-                <Sparkles className="w-5 h-5 text-primary-foreground" />
+                <DraftingCompass className="w-5 h-5 text-primary-foreground rotate-180" />
               </button>
             </div>
           )}

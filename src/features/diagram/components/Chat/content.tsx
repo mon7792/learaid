@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useMemo, useCallback, memo } from "react";
-import { Sparkles, User, Bot, Play, Loader2 } from "lucide-react";
+import {  User, Bot, Play, Loader2, DraftingCompass } from "lucide-react";
 
 import { useHydratedStore } from "@/store";
 import { ChatMessage } from "@/features/diagram/types";
@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 const EmptyState = memo(() => (
   <div className="text-center py-8">
     <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center mx-auto mb-3">
-      <Sparkles className="w-6 h-6 text-muted-foreground" />
+      <DraftingCompass className="w-6 h-6 text-muted-foreground rotate-180" />
     </div>
     <p className="text-sm text-muted-foreground">
       Start a conversation to generate your diagram
