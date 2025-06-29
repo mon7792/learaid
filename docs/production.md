@@ -16,4 +16,4 @@
 docker buildx build \
 --build-arg NODE_ENV=production \
 --push --platform linux/arm64/v8,linux/amd64 \
---tag ghcr.io/mon7792/vanita.ai.app:latest .
+--tag ghcr.io/mon7792/croi.ai.app:latest .

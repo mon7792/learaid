@@ -40,7 +40,7 @@ export default function SuccessPage() {
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
           <DraftingCompass className="w-5 h-5 text-primary-foreground rotate-180" />
           </div>
-          <span className="text-xl font-bold">Vanita</span>
+          <span className="text-xl font-bold">Croi</span>
         </Link>
       </header>
 
@@ -56,7 +56,7 @@ export default function SuccessPage() {
           <div className="space-y-4">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
               Welcome to
-              <span className="text-primary block">Vanita!</span>
+              <span className="text-primary block">Croi!</span>
             </h1>
             <p className="text-xl text-muted-foreground leading-relaxed">
               Your subscription has been successfully activated. You can now start creating amazing diagrams with AI.

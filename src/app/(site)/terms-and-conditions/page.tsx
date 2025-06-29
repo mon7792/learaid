@@ -19,7 +19,7 @@ export default function TermsAndConditionsPage() {
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
           <DraftingCompass className="w-5 h-5 text-primary-foreground rotate-180" />
           </div>
-          <span className="text-2xl font-bold font-sora">Vanita</span>
+          <span className="text-2xl font-bold font-sora">Croi</span>
         </Link>
       </header>
 
@@ -45,7 +45,7 @@ export default function TermsAndConditionsPage() {
           <Alert className="border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950/50">
             <AlertTriangle className="h-4 w-4 text-orange-600" />
             <AlertDescription className="text-orange-800 dark:text-orange-200">
-              <strong>Beta Service Notice:</strong> Vanita is currently in beta testing phase. 
+              <strong>Beta Service Notice:</strong> Croi is currently in beta testing phase. 
               Service features, availability, and terms may change without prior notice. 
               Use at your own discretion.
             </AlertDescription>
@@ -61,9 +61,9 @@ export default function TermsAndConditionsPage() {
             </CardHeader>
             <CardContent className="prose prose-neutral dark:prose-invert max-w-none">
               <p>
-                Welcome to Vanita (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;), an AI-powered diagram generation 
+                Welcome to Croi (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;), an AI-powered diagram generation 
                 service. These Terms and Conditions (&quot;Terms&quot;) govern your use of our website, 
-                application, and services (collectively, the &quot;Service&quot;) operated by Vanita.
+                application, and services (collectively, the &quot;Service&quot;) operated by Croi.
               </p>
               <p>
                 By accessing or using our Service, you agree to be bound by these Terms. 
@@ -137,7 +137,7 @@ export default function TermsAndConditionsPage() {
             </CardHeader>
             <CardContent className="prose prose-neutral dark:prose-invert max-w-none">
               <h4>4.1 Beta Service Limitations</h4>
-              <p>As a beta service, Vanita may experience:</p>
+              <p>As a beta service, Croi may experience:</p>
               <ul>
                 <li>Temporary service interruptions or downtime</li>
                 <li>Bugs, errors, or unexpected behavior</li>
@@ -196,7 +196,7 @@ export default function TermsAndConditionsPage() {
             </CardHeader>
             <CardContent className="prose prose-neutral dark:prose-invert max-w-none">
               <h4>6.1 Service Ownership</h4>
-              <p>Vanita owns all rights to the Service, including software, designs, and trademarks.</p>
+              <p>Croi owns all rights to the Service, including software, designs, and trademarks.</p>
 
               <h4>6.2 User-Generated Content</h4>
               <ul>
@@ -329,7 +329,7 @@ export default function TermsAndConditionsPage() {
             </CardHeader>
             <CardContent className="prose prose-neutral dark:prose-invert max-w-none">
               <h4>12.1 Governing Law</h4>
-              <p>These Terms are governed by the laws of the European Union and the jurisdiction where Vanita is incorporated.</p>
+              <p>These Terms are governed by the laws of the European Union and the jurisdiction where Croi is incorporated.</p>
 
               <h4>12.2 Dispute Resolution</h4>
               <ul>
@@ -360,7 +360,7 @@ export default function TermsAndConditionsPage() {
               <p>If you have questions about these Terms, please contact us:</p>
               <ul>
                 <li>Email: <Link href="/support" className="text-primary hover:underline">Support</Link></li>
-                <li>Website: <Link href="/" className="text-primary hover:underline">vanita.app</Link></li>
+                <li>Website: <Link href="/" className="text-primary hover:underline">croi.store</Link></li>
               </ul>
             </CardContent>
           </Card>
@@ -368,7 +368,7 @@ export default function TermsAndConditionsPage() {
           {/* Footer */}
           <div className="text-center pt-8 border-t">
             <p className="text-sm text-muted-foreground">
-              By using Vanita, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions.
+              By using Croi, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions.
             </p>
             <div className="mt-4 flex justify-center gap-6 text-sm">
               <Link href="/privacy-policy" className="text-primary hover:underline">

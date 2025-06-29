@@ -30,10 +30,10 @@ const fontSourceCodePro = Source_Code_Pro({
 
 export const metadata: Metadata = {
   title: {
-    default: "Vanita - Copilot for technical diagrams",
-    template: "%s | Vanita"
+    default: "Croi - Copilot for technical diagrams",
+    template: "%s | Croi"
   },
-  description: "Copilot for technical diagrams. Transform plain English descriptions into stunning, interactive diagrams in seconds. Whether you're a developer visualizing system architectures, Sequence Diagram, or an product Manager illustrating concepts with flowcharts, Vanita makes it effortless.",
+  description: "Copilot for technical diagrams. Transform plain English descriptions into stunning, interactive diagrams in seconds. Whether you're a developer visualizing system architectures, Sequence Diagram, or an product Manager illustrating concepts with flowcharts, Croi makes it effortless.",
   keywords: [
     "AI diagram generator",
     "flowchart maker",
@@ -44,15 +44,15 @@ export const metadata: Metadata = {
     "diagram software",
     "collaborative diagrams"
   ],
-  authors: [{ name: "Vanita Team" }],
-  creator: "Vanita",
-  publisher: "Vanita",
+  authors: [{ name: "Croi Team" }],
+  creator: "Croi",
+  publisher: "Croi",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://vanita.app"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://croi.store"),
   alternates: {
     canonical: "/",
   },
@@ -60,22 +60,22 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "/",
-    title: "Vanita - Copilot for technical diagrams",
-    description: "Copilot for technical diagrams. Transform plain English descriptions into stunning, interactive diagrams in seconds. Whether you're a developer visualizing system architectures, Sequence Diagram, or an product Manager illustrating concepts with flowcharts, Vanita makes it effortless.",
-    siteName: "Vanita",
+    title: "Croi - Copilot for technical diagrams",
+    description: "Copilot for technical diagrams. Transform plain English descriptions into stunning, interactive diagrams in seconds. Whether you're a developer visualizing system architectures, Sequence Diagram, or an product Manager illustrating concepts with flowcharts, Croi makes it effortless.",
+    siteName: "Croi",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Vanita - Copilot for technical diagrams",
+        alt: "Croi - Copilot for technical diagrams",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Vanita - Copilot for technical diagrams",
-    description: "Copilot for technical diagrams. Transform plain English descriptions into stunning, interactive diagrams in seconds. Whether you're a developer visualizing system architectures, Sequence Diagram, or an product Manager illustrating concepts with flowcharts, Vanita makes it effortless.",
+    title: "Croi - Copilot for technical diagrams",
+    description: "Copilot for technical diagrams. Transform plain English descriptions into stunning, interactive diagrams in seconds. Whether you're a developer visualizing system architectures, Sequence Diagram, or an product Manager illustrating concepts with flowcharts, Croi makes it effortless.",
     images: ["/og-image.png"],
   },
   robots: {

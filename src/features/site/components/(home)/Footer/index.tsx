@@ -4,7 +4,7 @@ export const Footer = () => {
   return (
     <footer className="w-full p-6 mt-16">
       <div className="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-        <div>© 2025 Vanita</div>
+        <div>© 2025 Croi</div>
         <div className="flex flex-col gap-1 text-center">
         <Link
           href="https://www.linkedin.com/in/monishkadam "

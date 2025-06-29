@@ -79,7 +79,7 @@ const DiagramSection = () => {
             <div className="w-6 h-6 bg-primary rounded-md flex items-center justify-center">
             <DraftingCompass className="w-4 h-4 text-primary-foreground rotate-180" />
             </div>
-            <span className="font-semibold text-2xl font-sora">Vanita</span>
+            <span className="font-semibold text-2xl font-sora">Croi</span>
           </Link>
         </div>
 

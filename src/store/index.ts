@@ -28,7 +28,7 @@ export const useStore = create<
         ...createCsrfSlice(...a),
       }),
       {
-        name: "Vanita-storage",
+        name: "croi-storage",
         onRehydrateStorage: () => (state) => {
           if (state) {
             state.setHydrated(true);
@@ -37,7 +37,7 @@ export const useStore = create<
       }
     ),
     {
-      name: "Vanita-store",
+      name: "croi-store",
     }
   )
 );

@@ -97,7 +97,7 @@ export default function ExcalidrawWrapper() {
         initialData={{ elements: [], files: {} }}
         viewModeEnabled={false}
         theme={resolvedTheme as "light" | "dark"}
-        name="Vanita Diagram"
+        name="Croi Diagram"
         UIOptions={{
           canvasActions: {
             saveToActiveFile: false,

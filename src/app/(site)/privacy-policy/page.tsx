@@ -30,7 +30,7 @@ export default function PrivacyPolicyPage() {
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
             <DraftingCompass className="w-5 h-5 text-primary-foreground rotate-180" />
           </div>
-          <span className="text-2xl font-bold font-sora">Vanita</span>
+          <span className="text-2xl font-bold font-sora">Croi</span>
         </Link>
       </header>
 
@@ -73,14 +73,14 @@ export default function PrivacyPolicyPage() {
             </CardHeader>
             <CardContent className="prose prose-neutral dark:prose-invert max-w-none">
               <p>
-                At Vanita (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;),
+                At Croi (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;),
                 we take your privacy seriously. This Privacy Policy explains how
                 we collect, use, process, and protect your personal information
                 when you use our AI-powered diagram generation service.
               </p>
               <p>
                 This policy applies to our website, application, and all related
-                services. By using Vanita, you consent to the practices
+                services. By using Croi, you consent to the practices
                 described in this Privacy Policy.
               </p>
               <p>
@@ -429,7 +429,7 @@ export default function PrivacyPolicyPage() {
                   </Link>
                 </li>
                 <li>Use the account settings in your dashboard</li>
-                <li>Email us directly at privacy@vanita.app</li>
+                <li></li>
                 <li>We will respond to requests within 30 days</li>
               </ul>
             </CardContent>
@@ -729,7 +729,7 @@ export default function PrivacyPolicyPage() {
             </CardHeader>
             <CardContent className="prose prose-neutral dark:prose-invert max-w-none">
               <p>
-                Vanita is not intended for use by children under 18 years of
+                Croi is not intended for use by children under 18 years of
                 age. We do not knowingly collect personal information from
                 children under 18. If we become aware that we have collected
                 personal information from a child under 18, we will take steps
@@ -813,7 +813,7 @@ export default function PrivacyPolicyPage() {
               </p>
               <ul>
                 <li>
-                  <strong>Email:</strong> privacy@vanita.app
+                  <strong>Email:</strong> 
                 </li>
                 <li>
                   <strong>Support Portal:</strong>{" "}
@@ -821,7 +821,7 @@ export default function PrivacyPolicyPage() {
                     href="/support"
                     className="text-primary hover:underline"
                   >
-                    vanita.app/support
+                    s
                   </Link>
                 </li>
                 <li>
@@ -837,7 +837,7 @@ export default function PrivacyPolicyPage() {
               </p>
               <ul>
                 <li>
-                  <strong>Email:</strong> dpo@vanita.app
+                  <strong>Email:</strong> 
                 </li>
                 <li>
                   <strong>Subject Line:</strong> &quot;GDPR Request&quot; or
@@ -861,7 +861,7 @@ export default function PrivacyPolicyPage() {
               </p>
               <ul>
                 <li>
-                  <strong>Email:</strong> security@vanita.app
+                  <strong>Email:</strong> 
                 </li>
                 <li>
                   <strong>Subject Line:</strong> &quot;URGENT - Security
