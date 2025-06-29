@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { openai } from "@ai-sdk/openai";
+import { google } from "@ai-sdk/google";
 import { generateObject } from "ai";
 import { NextRequest, NextResponse } from "next/server";
 import { isValid } from "ulidx";
@@ -89,7 +89,7 @@ export async function POST(
 
     // generate mermaid code
     const { object, finishReason, usage } = await generateObject({
-      model: openai("gpt-4-turbo"),
+      model: google("gemini-2.5-flash-lite-preview-06-17"),
       system: SYSTEM_PROMPT,
       prompt: `Generate a Mermaid diagram for: ${message}`,
       temperature: 0.6,
