@@ -30,10 +30,10 @@ const fontSourceCodePro = Source_Code_Pro({
 
 export const metadata: Metadata = {
   title: {
-    default: "Vanita - AI-Powered Diagram Generator",
+    default: "Vanita - Copilot for technical diagrams",
     template: "%s | Vanita"
   },
-  description: "Create beautiful diagrams instantly with AI. Generate flowcharts, mind maps, and technical diagrams using natural language. Free to start, powerful to scale.",
+  description: "Copilot for technical diagrams. Transform plain English descriptions into stunning, interactive diagrams in seconds. Whether you're a developer visualizing system architectures, Sequence Diagram, or an product Manager illustrating concepts with flowcharts, Vanita makes it effortless.",
   keywords: [
     "AI diagram generator",
     "flowchart maker",
@@ -60,22 +60,22 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "/",
-    title: "Vanita - AI-Powered Diagram Generator",
-    description: "Create beautiful diagrams instantly with AI. Generate flowcharts, mind maps, and technical diagrams using natural language.",
+    title: "Vanita - Copilot for technical diagrams",
+    description: "Copilot for technical diagrams. Transform plain English descriptions into stunning, interactive diagrams in seconds. Whether you're a developer visualizing system architectures, Sequence Diagram, or an product Manager illustrating concepts with flowcharts, Vanita makes it effortless.",
     siteName: "Vanita",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Vanita - AI-Powered Diagram Generator",
+        alt: "Vanita - Copilot for technical diagrams",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Vanita - AI-Powered Diagram Generator",
-    description: "Create beautiful diagrams instantly with AI. Generate flowcharts, mind maps, and technical diagrams using natural language.",
+    title: "Vanita - Copilot for technical diagrams",
+    description: "Copilot for technical diagrams. Transform plain English descriptions into stunning, interactive diagrams in seconds. Whether you're a developer visualizing system architectures, Sequence Diagram, or an product Manager illustrating concepts with flowcharts, Vanita makes it effortless.",
     images: ["/og-image.png"],
   },
   robots: {
