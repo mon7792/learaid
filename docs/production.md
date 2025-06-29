@@ -11,3 +11,9 @@
 
 1. spin up the database.
 2. migrate the data.
+
+
+docker buildx build \
+--build-arg NODE_ENV=production \
+--push --platform linux/arm64/v8,linux/amd64 \
+--tag ghcr.io/mon7792/vanita.ai.app:latest .

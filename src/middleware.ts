@@ -17,9 +17,10 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - /api/billing/webhook (Stripe webhook endpoint)
+     * - /api/auth/* (authentication routes)
      */
     {
-      source: '/((?!_next/static|_next/image|favicon.ico|api/billing/webhook).*)',
+      source: '/((?!_next/static|_next/image|favicon.ico|api/billing/webhook|api/auth).*)',
       missing: [
         { type: 'header', key: 'next-router-prefetch' },
         { type: 'header', key: 'purpose', value: 'prefetch' },

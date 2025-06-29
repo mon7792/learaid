@@ -15,6 +15,7 @@ const cspHeader = `
 `
 
 const nextConfig: NextConfig = {
+  output: 'standalone',
   transpilePackages: ['@excalidraw/excalidraw', 'use-debounce'],
   headers: async () => {
     return [
