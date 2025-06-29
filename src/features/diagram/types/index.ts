@@ -5,6 +5,11 @@ export type DiagramResponse = {
   nextCursor?: string;
 };
 
+export type DiagramMessagesResponse = {
+  messages?: ChatMessage[];
+  nextCursor?: string;
+};
+
 
 export type ChatMessage = {
   id: string;

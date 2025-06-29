@@ -1,15 +1,14 @@
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 
-import { listDiagrams, listMessages } from "@/features/diagram/api/request";
+import { listDiagrams, listPaginatedMessages } from "@/features/diagram/api/request";
 
-export const useListMessages = (
-  id: string,
-  enabled: boolean,
-  cursor?: string
-) => {
-  return useQuery({
-    queryKey: ["messages", id, cursor],
-    queryFn: () => listMessages(id, cursor),
+
+export const useInfiniteListMessages = (id: string, enabled: boolean) => {
+  return useInfiniteQuery({
+    queryKey: ["messages", "infinite", id],
+    queryFn: ({ pageParam }) => listPaginatedMessages(id, pageParam),
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
     enabled,
   });
 };

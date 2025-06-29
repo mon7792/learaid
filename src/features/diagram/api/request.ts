@@ -1,4 +1,4 @@
-import { ChatMessage, DiagramResponse } from "@/features/diagram/types";
+import { ChatMessage, DiagramMessagesResponse, DiagramResponse } from "@/features/diagram/types";
 import { Paginated } from "@/types";
 
 export const generateDiagram = async (
@@ -71,16 +71,16 @@ export const listDiagrams = async (
   return data;
 };
 
-export const listMessages = async (
+export const listPaginatedMessages = async (
   id: string,
   cursor?: string
-): Promise<DiagramResponse> => {
+): Promise<DiagramMessagesResponse> => {
   const queryParams = new URLSearchParams();
   if (cursor) {
     queryParams.set("cursor", cursor);
   }
 
-  const response = await fetch(`/api/diagram/${id}?${queryParams.toString()}`, {
+  const response = await fetch(`/api/diagram/${id}/messages?${queryParams.toString()}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

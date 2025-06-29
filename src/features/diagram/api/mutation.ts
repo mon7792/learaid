@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import {
   createNewDiagram,
@@ -11,10 +11,18 @@ export const useGenerateDiagram = (
   onSuccess: (data: ChatMessage) => void,
   onError: (error: Error) => void
 ) => {
+  const queryClient = useQueryClient();
+  
   return useMutation({
     mutationFn: ({ id, message }: { id: string; message: string }) =>
       generateDiagram(id, message, csrfToken),
-    onSuccess,
+    onSuccess: (data, variables) => {
+      // Invalidate the infinite query to refetch messages
+      queryClient.invalidateQueries({
+        queryKey: ["messages", "infinite", variables.id],
+      });
+      onSuccess(data);
+    },
     onError,
   });
 };

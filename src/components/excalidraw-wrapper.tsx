@@ -12,11 +12,17 @@ import { parseMermaidToExcalidraw } from "@excalidraw/mermaid-to-excalidraw";
 import { useHydratedStore } from "@/store";
 
 import "@excalidraw/excalidraw/index.css";
+import { toast } from "sonner";
 
 
 const defaultMermaidCode = `
 graph TD
 A[Start] --> B[Stop]
+`;
+
+const errorMermaidCode = `
+graph TD
+A[Error] --> B[Error]
 `;
 
 export default function ExcalidrawWrapper() {
@@ -52,9 +58,16 @@ export default function ExcalidrawWrapper() {
         excalidrawAPI.scrollToContent(excalidrawElements, { fitToContent: true, duration: 0 });
 
       } catch (error) {
+        toast.error('🚨 Error converting. we will be fixing it in next release');
         console.error('Error converting diagram:', error);
         if (isCancelled) return;
-        excalidrawAPI.updateScene({ elements: [] });
+        const { elements: skeletonElements, files: excalidrawFiles } = await parseMermaidToExcalidraw(errorMermaidCode, {});
+        const excalidrawElements = convertToExcalidrawElements(skeletonElements);
+        excalidrawAPI.updateScene({ elements: excalidrawElements });
+        if (excalidrawFiles) {
+          excalidrawAPI.addFiles(Object.values(excalidrawFiles));
+        }
+        excalidrawAPI.scrollToContent(excalidrawElements, { fitToContent: true, duration: 0 });
       } finally {
         if (!isCancelled) {
           setIsConverting(false);

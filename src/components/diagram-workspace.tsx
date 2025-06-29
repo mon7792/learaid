@@ -3,14 +3,13 @@
 import dynamic from "next/dynamic";
 import { Sparkles, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 
 import { useHydratedStore } from "@/store";
 
 import { ThemeModeSwitcher } from "@/components/theme-toggle";
 import { UserProfile } from "@/features/auth/components/UserProfile";
 import { Chat } from "@/features/diagram/components/Chat";
-import { useListMessages } from "@/features/diagram/api/query";
 
 import "@excalidraw/excalidraw/index.css";
 
@@ -36,19 +35,7 @@ interface DiagramWorkspaceProps {
 }
 
 export default function DiagramWorkspace({ diagramId, csrfToken }: DiagramWorkspaceProps) {
-  // this temporary solution to set the diagram id in the store
-  const {
-    data: diagramData,
-    isLoading: isLoadingDiagram,
-    refetch: refetchDiagram,
-  } = useListMessages(diagramId, false);
-  const { setCurrentDiagramId, setDiagrams, isHydrated, diagrams, setCsrfToken } =
-    useHydratedStore();
-
-  const diagramTitle = useMemo(
-    () => diagrams.find((d) => d.id === diagramId)?.name ?? "",
-    [diagrams, diagramId]
-  );
+  const { setCurrentDiagramId, isHydrated, setCsrfToken } = useHydratedStore();
 
   useEffect(() => {
     if (csrfToken) {
@@ -62,46 +49,11 @@ export default function DiagramWorkspace({ diagramId, csrfToken }: DiagramWorksp
       console.log("Initializing diagram with ID:", diagramId);
       // Set the current diagram ID
       setCurrentDiagramId(diagramId);
-
-      // check if the diagram exists
-      const diagramExists = diagrams.some((d) => d.id === diagramId);
-      if (!diagramExists) {
-        refetchDiagram();
-      }
     }
-  }, [diagramId, setCurrentDiagramId, isHydrated, refetchDiagram, diagrams]);
-
-  useEffect(() => {
-    if (diagramData) {
-      setDiagrams((currentDiagrams) => {
-        const diagramExists = currentDiagrams.some((d) => d.id === diagramId);
-        if (!diagramExists) {
-          return [
-            ...currentDiagrams,
-            {
-              id: diagramId,
-              name: diagramData.title,
-              messages: diagramData.messages || [],
-            },
-          ];
-        } else {
-          return currentDiagrams.map((d) => {
-            if (d.id === diagramId) {
-              return {
-                ...d,
-                name: diagramData.title,
-                messages: diagramData.messages || [],
-              };
-            }
-            return d;
-          });
-        }
-      });
-    }
-  }, [diagramData, setDiagrams, diagramId]);
+  }, [diagramId, setCurrentDiagramId, isHydrated]);
 
   // Show loading state while store is hydrating
-  if (!isHydrated || isLoadingDiagram) {
+  if (!isHydrated) {
     return (
       <div className="h-screen flex items-center justify-center">
         <div className="text-center space-y-4">
@@ -112,14 +64,10 @@ export default function DiagramWorkspace({ diagramId, csrfToken }: DiagramWorksp
     );
   }
 
-  return <DiagramSection title={diagramTitle} />;
+  return <DiagramSection />;
 }
 
-type DiagramSectionProps = {
-  title: string;
-};
-
-const DiagramSection = ({ title }: DiagramSectionProps) => {
+const DiagramSection = () => {
   return (
     <>
       <header className="flex items-center justify-between p-4 border-b bg-background/95 backdrop-blur">
@@ -131,9 +79,8 @@ const DiagramSection = ({ title }: DiagramSectionProps) => {
             <div className="w-6 h-6 bg-primary rounded-md flex items-center justify-center">
               <Sparkles className="w-4 h-4 text-primary-foreground" />
             </div>
-            <span className="font-semibold">Vanita</span>
+            <span className="font-semibold text-2xl font-sora">Vanita</span>
           </Link>
-          <div className="text-sm text-muted-foreground">Diagram: {title}</div>
         </div>
 
         <div className="flex items-center gap-2">

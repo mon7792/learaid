@@ -3,7 +3,7 @@ import { isValid } from "ulidx";
 
 import { getUser, isAuthenticated } from "@/utils/auth";
 
-import { listMessages } from "@/features/diagram/usecase/list-messages";
+import { listMessagesWithDiagram } from "@/features/diagram/usecase/list-messages";
 
 export async function GET(
   request: NextRequest,
@@ -28,7 +28,7 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const diagram = await listMessages(user.id, id, cursor, 10);
+    const diagram = await listMessagesWithDiagram(user.id, id, cursor, 10);
 
     return NextResponse.json(diagram);
   } catch (error) {

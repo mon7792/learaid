@@ -210,3 +210,76 @@ export const updateDiagramTokenTx = async (
     throw errDiagramUpdate;
   }
 };
+
+export const getPaginatedMessages = async (
+  userId: string,
+  diagramId: string,
+  cursor?: string,
+  limit: number = 10
+): Promise<{messages: Array<{
+  id: string;
+  role: "user" | "ai"; 
+  message: unknown;
+  mermaid: string | null;
+  excalidraw: unknown;
+  tokenCost: number;
+  createdAt: Date;
+}>;
+  nextCursor?: string;
+}> => {
+  return await db.transaction(async (tx) => {
+    // Check if user has access to the diagram
+    const userDiagram = await tx
+      .select({
+        id: diagram.id,
+      })
+      .from(diagram)
+      .where(and(
+        eq(diagram.id, diagramId),
+        eq(diagram.userId, userId)
+      ))
+      .limit(1);
+
+    if (userDiagram.length === 0) {
+      throw errDiagramNotFound;
+    }
+
+    // Build where conditions for messages
+    const whereConditions = [
+      eq(diagramMessages.diagramId, diagramId)
+    ];
+
+    // Apply cursor if provided - for reverse pagination, we want messages older than the cursor
+    if (cursor) {
+      whereConditions.push(lt(diagramMessages.createdAt, new Date(cursor)));
+    }
+
+    // Get paginated messages - order by oldest first for reverse pagination
+    const messages = await tx
+      .select({
+        id: diagramMessages.id,
+        role: diagramMessages.role,
+        message: diagramMessages.message,
+        mermaid: diagramMessages.mermaid,
+        excalidraw: diagramMessages.excalidraw,
+        tokenCost: diagramMessages.tokenCost,
+        createdAt: diagramMessages.createdAt
+      })
+      .from(diagramMessages)
+      .where(and(...whereConditions))
+      .orderBy(desc(diagramMessages.createdAt)) // Keep desc for now, we'll handle the logic in the component
+      .limit(limit + 1);
+
+    let nextCursor: string | undefined;
+    if (messages.length > limit) {
+      messages.pop();
+      // For reverse pagination, the next cursor should be the oldest message's timestamp
+      nextCursor = messages[messages.length - 1]?.createdAt.toISOString();
+    }
+
+    return {
+      messages,
+      nextCursor,
+    };
+  });
+};

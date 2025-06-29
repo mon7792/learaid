@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { LogOut, LayoutDashboard, BadgeEuro } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import { signOut } from "@/lib/auth-client";
 
@@ -22,8 +24,14 @@ type UserProfileDropdownContentProps = {
 export const UserProfileDropdownContent = ({
   user,
 }: UserProfileDropdownContentProps) => {
-  const handleLogout = () => {
-    signOut();
+  const router = useRouter();
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      router.push("/");
+    } catch {
+      toast.error("Failed to logout. Please try again.");
+    }
   };
 
   return (

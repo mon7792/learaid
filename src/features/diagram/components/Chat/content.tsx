@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useMemo, useCallback, memo } from "react";
-import { Sparkles, User, Bot, Play } from "lucide-react";
+import { Sparkles, User, Bot, Play, Loader2 } from "lucide-react";
 
 import { useHydratedStore } from "@/store";
 import { ChatMessage } from "@/features/diagram/types";
+import { useInfiniteListMessages } from "@/features/diagram/api/query";
+
 import { Button } from "@/components/ui/button";
 
 // Memoized empty state component
@@ -130,42 +132,125 @@ const MessageItem = memo<{ message: ChatMessage }>(({ message }) => {
 MessageItem.displayName = "MessageItem";
 
 export const ChatContent = () => {
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { id, diagrams } = useHydratedStore();
-  
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollHeightRef = useRef<number>(0);
+  const { id } = useHydratedStore();
+
+  const {
+    data: messagesData,
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteListMessages(id || "", !!id);
+
+  // Flatten all pages into a single array of messages
   const messages = useMemo(() => {
-    if (!id) return [];
-    return diagrams.find((diagram) => diagram.id === id)?.messages || [];
-  }, [diagrams, id]);
+    if (!messagesData?.pages) return [];
+
+    const allMessages = messagesData.pages
+      .flatMap((page) => page.messages || [])
+      .sort((a, b) => {
+        const timeA = new Date(a.timestamp).getTime();
+        const timeB = new Date(b.timestamp).getTime();
+        
+        // First sort by timestamp (newest first)
+        if (timeA !== timeB) {
+          return timeB - timeA;
+        }
+        
+        // If timestamps are the same, ensure user messages come first
+        if (a.role === "user" && b.role === "ai") {
+          return -1; // User message first
+        }
+        if (a.role === "ai" && b.role === "user") {
+          return 1; // User message first
+        }
+        
+        return 0; // Same role, maintain order
+      });
+    return allMessages;
+  }, [messagesData]);
 
   // Optimized scroll effect with useCallback
-  const scrollToBottom = useCallback(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  const scrollToTop = useCallback(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = 0;
+    }
   }, []);
 
+  // Preserve scroll position when loading older messages
   useEffect(() => {
-    scrollToBottom();
-  }, [messages, scrollToBottom]);
+    if (isFetchingNextPage || !containerRef.current) return;
+
+    const container = containerRef.current;
+    const newScrollHeight = container.scrollHeight;
+    const oldScrollHeight = scrollHeightRef.current;
+
+    if (oldScrollHeight > 0 && newScrollHeight > oldScrollHeight) {
+      // Calculate the difference in scroll height and adjust scroll position
+      const scrollDiff = newScrollHeight - oldScrollHeight;
+      container.scrollTop = scrollDiff;
+    }
+  }, [messages, isFetchingNextPage]);
+
+  // Scroll to top when new messages are added
+  useEffect(() => {
+    if (messages.length > 0) {
+      scrollToTop();
+    }
+  }, [messages.length, scrollToTop]);
 
   // Memoized messages list to prevent unnecessary re-renders
   const messagesList = useMemo(() => {
-    const sortedMessages = messages.sort((a, b) => {
-      return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
-    });
-    return sortedMessages
-      .map((message: ChatMessage) => (
-        <MessageItem key={message.id} message={message} />
-      ));
+    return messages.map((message: ChatMessage) => (
+      <MessageItem key={message.id} message={message} />
+    ));
   }, [messages]);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-8">
+        <Loader2 className="w-6 h-6 animate-spin" />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-sm text-destructive">Error loading messages</p>
+      </div>
+    );
+  }
 
   if (!messages || messages.length === 0) {
     return <EmptyState />;
   }
 
   return (
-    <div className="space-y-4">
+    <div ref={containerRef}>
+      {/* Loading indicator at top */}
+      {isFetchingNextPage && (
+        <div className="flex items-center justify-center py-2">
+          <Loader2 className="w-4 h-4 animate-spin" />
+        </div>
+      )}
+      {hasNextPage && (
+          <Button 
+            onClick={() => {
+              console.log("Manual fetch triggered");
+              fetchNextPage();
+            }}
+            variant="outline"
+            className="flex w-1/2 max-w-xs rounded justify-self-center my-2 text-muted-foreground cursor-pointer"
+          >
+            Load More
+          </Button>
+        )}
+
       {messagesList}
-      <div ref={messagesEndRef} />
     </div>
   );
 };

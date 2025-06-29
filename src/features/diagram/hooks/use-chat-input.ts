@@ -3,26 +3,19 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useMemo } from "react";
 import { toast } from "sonner";
 import { useEffect } from "react";
 
 import { useHydratedStore } from "@/store";
-import { ChatMessage } from "@/features/diagram/types";
 import { useGenerateDiagram } from "@/features/diagram/api/mutation";
 import { chatSchema } from "@/features/diagram/schema";
 import { useGetTokens } from "@/features/billing/api/query";
 import { useEstimateTokenCost } from "@/features/billing/api/mutation";
 
 export const useChatInput = () => {
-  const { setMessages, setMermaid, id, diagrams, tokens, setBuyDialogOpen, csrfToken } =
+  const { setMermaid, id, tokens, setBuyDialogOpen, csrfToken } =
     useHydratedStore();
   const { getTokenTotal, getTokenEstimate } = useTokensCost();
-
-  const messages = useMemo(() => {
-    if (!id) return [];
-    return diagrams.find((diagram) => diagram.id === id)?.messages || [];
-  }, [diagrams, id]);
 
   const form = useForm<z.infer<typeof chatSchema>>({
     resolver: zodResolver(chatSchema),
@@ -34,7 +27,6 @@ export const useChatInput = () => {
   const { mutate: generateDiagram, isPending } = useGenerateDiagram(
     csrfToken,
     (data) => {
-      addAiMessage(data);
       setMermaid(data.mermaid || null);
       form.reset();
     },
@@ -45,24 +37,9 @@ export const useChatInput = () => {
     }
   );
 
-  const addUserMessage = (content: string) => {
-    if (!id) return;
-
-    const userMessage: ChatMessage = {
-      id: Date.now().toString(),
-      role: "user",
-      message: content,
-      timestamp: new Date(),
-    };
-    setMessages([...messages, userMessage]);
-  };
-
-  const addAiMessage = (message: ChatMessage) => {
-    if (!id) return;
-    setMessages([...messages, message]);
-  };
-
-  const checkSufficientTokens = async (message: string): Promise<boolean | null> => {
+  const checkSufficientTokens = async (
+    message: string
+  ): Promise<boolean | null> => {
     // check if the user token is less than 0
     if (tokens && tokens < 0) {
       return false;
@@ -114,10 +91,6 @@ export const useChatInput = () => {
       return;
     }
 
-    // TODO: fix this flow of messages
-
-    addUserMessage(values.message);
-
     generateDiagram({ id, message: values.message });
   };
 
@@ -133,7 +106,11 @@ export const useChatInput = () => {
 
 const useTokensCost = () => {
   const { csrfToken, setTokens } = useHydratedStore();
-  const { refetch: getTokenTotal, data: tokenTotal, isSuccess: isTokenTotalSuccess } = useGetTokens();
+  const {
+    refetch: getTokenTotal,
+    data: tokenTotal,
+    isSuccess: isTokenTotalSuccess,
+  } = useGetTokens();
   const { mutateAsync: getTokenEstimate } = useEstimateTokenCost(csrfToken);
 
   useEffect(() => {
